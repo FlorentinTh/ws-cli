@@ -158,7 +158,7 @@ export class WebsocketServer {
         writeStream.write('{"message": "data"}\n');
 
         process.stdin.resume();
-        process.on('SIGINT', function () {
+        process.on('SIGINT', () => {
           writeStream.write('{"message": "complete"}\n');
           writeStream.end(async () => {
             writeStream.close();
@@ -179,7 +179,5 @@ export class WebsocketServer {
       console.log(chalk.grey('['), chalk.red(error), chalk.grey(']'));
       process.exit();
     }
-
-    // const _recording = new Recording(this._destination, this._server);
   }
 }
