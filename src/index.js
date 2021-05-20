@@ -15,7 +15,8 @@ const OUTPUT_PATH = path.join(
 
 (async () => {
   ConsoleHelper.clear();
-  ConsoleHelper.printAppTitle('ws-cli');
+
+  ConsoleHelper.printAppTitle(process.env.npm_package_name);
   ConsoleHelper.printAppDescription();
 
   const _enableDelayAnswer = await WebsocketServer._askEnableDelay();
