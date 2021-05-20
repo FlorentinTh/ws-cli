@@ -1,49 +1,64 @@
+import path from 'path';
+
 import chalk from 'chalk';
+import { getDesktopFolder } from 'platform-folders';
+
+import FileHelper from './helpers/fileHelper';
 
 import ConsoleHelper from './helpers/consoleHelper';
+import { serverList, WebsocketServer } from './websocketServer';
 
-import Recording from './recording';
-import * as websocketServers from './websocketServers';
+const OUTPUT_PATH = path.join(
+  getDesktopFolder(),
+  FileHelper.currentDirectory + '_output'
+);
 
 (async () => {
   ConsoleHelper.clear();
   ConsoleHelper.printAppTitle('ws-cli');
+  ConsoleHelper.printAppDescription();
 
-  const serverAnswer = await websocketServers.askForServer();
-  const servers = websocketServers.serverList;
+  const _enableDelayAnswer = await WebsocketServer._askEnableDelay();
 
-  let rec = 'recording';
-  if (serverAnswer.websocket === '*') {
-    rec += 's';
+  let delay = null;
+  let timeInfo = '';
 
-    for (const server of servers) {
-      await websocketServers.connect(server);
+  if (_enableDelayAnswer.enable) {
+    const delayValueAnswer = await WebsocketServer._askDelayValue();
+    delay = delayValueAnswer.value;
+    timeInfo += `${delay}s`;
+  }
+
+  const fileHelper = new FileHelper(OUTPUT_PATH);
+  const destination = fileHelper.destinationDirectory;
+
+  console.log(
+    chalk.greenBright('i'),
+    chalk.cyan(`your ${timeInfo} recordings will be saved to ${destination}`)
+  );
+
+  const serverAnswer = await WebsocketServer.askForServer();
+  const serverConfiguration = {
+    delay: delay,
+    destination: destination
+  };
+
+  if (serverAnswer.websocket === 'All') {
+    for (const server of serverList) {
+      serverConfiguration.server = server;
+      const websocketServer = new WebsocketServer(serverConfiguration);
+      await websocketServer.connect();
     }
   } else {
-    if (servers.some(server => server.name === serverAnswer.websocket)) {
-      const server = servers.find(server => server.name === serverAnswer.websocket);
-      await websocketServers.connect(server);
+    if (serverList.some(server => server.name === serverAnswer.websocket)) {
+      serverConfiguration.server = serverList.find(
+        server => server.name === serverAnswer.websocket
+      );
+
+      const websocketServer = new WebsocketServer(serverConfiguration);
+      await websocketServer.connect();
     } else {
       console.log(chalk.red(`No WebSocket server for ${serverAnswer.websocket} found.`));
     }
   }
-
-  const recording = new Recording();
-
-  const enableDelayAnswer = await recording.askEnableDelay();
-
-  let timeInfo = '';
-
-  if (enableDelayAnswer.enable) {
-    const delayValueAnswer = await recording.askDelayValue();
-
-    recording.delay = delayValueAnswer.value;
-
-    timeInfo += `${recording.delay}s `;
-  }
-
-  console.log(
-    chalk.greenBright('i'),
-    chalk.cyan(`your ${timeInfo}${rec} will be saved to ${recording.outputPath}`)
-  );
 })();
