@@ -12,6 +12,14 @@ class ConsoleHelper {
       chalk.white(figlet.textSync(title, { horizontalLayout: 'fitted' }))
     );
   }
+
+  static printAppDescription() {
+    return console.log(
+      chalk.white(
+        `This CLI allows you to record data from every WebSocket available in the LIARA laboratory.\n`
+      )
+    );
+  }
 }
 
 export default ConsoleHelper;
