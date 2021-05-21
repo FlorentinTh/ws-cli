@@ -7,6 +7,8 @@ import chalk from 'chalk';
 import WebSocketClient from 'websocket-as-promised';
 import WebSocket from 'ws';
 
+import ConsoleHelper from './helpers/consoleHelper';
+
 export const serverList = [
   {
     name: 'RFID',
@@ -16,32 +18,39 @@ export const serverList = [
   },
   {
     name: 'Energetic',
-    host: '172.24.24.99',
-    port: '6061',
+    host: '127.0.0.1',
+    port: '8081',
     secured: false
   },
   {
     name: 'UWB',
-    host: '172.24.24.122',
-    port: '6017',
+    host: '127.0.0.1',
+    port: '8082',
     secured: false
   }
 ];
 
 export class WebsocketServer {
+  #delay;
+  #destination;
+  #server;
+  #client;
+  #multiple;
+
   constructor(configuration) {
     if (!(configuration instanceof Object) && !(configuration === null)) {
       throw new Error('configuration must be a not null Object');
     }
 
-    this._delay = configuration.delay;
-    this._destination = configuration.destination;
-    this._server = configuration.server;
+    this.#delay = configuration.delay;
+    this.#destination = configuration.destination;
+    this.#server = configuration.server;
+    this.#multiple = configuration.multiple;
 
-    const _protocol = this._server.secured ? 'wss://' : 'ws://';
+    const protocol = this.#server.secured ? 'wss://' : 'ws://';
 
-    this._client = new WebSocketClient(
-      `${_protocol}${this._server.host}:${this._server.port}/`,
+    this.#client = new WebSocketClient(
+      `${protocol}${this.#server.host}:${this.#server.port}/`,
       {
         createWebSocket: url => new WebSocket(url),
         extractMessageData: event => event,
@@ -51,8 +60,8 @@ export class WebsocketServer {
     );
   }
 
-  static async _askEnableDelay() {
-    const _questions = [
+  static async askEnableDelay() {
+    const questions = [
       {
         type: 'confirm',
         name: 'enable',
@@ -61,17 +70,17 @@ export class WebsocketServer {
       }
     ];
 
-    return inquirer.prompt(_questions);
+    return inquirer.prompt(questions);
   }
 
-  static async _askDelayValue() {
-    const _questions = [
+  static async askDelayValue() {
+    const questions = [
       {
         type: 'input',
         name: 'value',
         message: 'how long does the recording should last in seconds?',
         validate: input => {
-          if (isNaN(input)) {
+          if (isNaN(input) || input <= 0) {
             return 'please enter a valid number greater than 0';
           }
 
@@ -80,11 +89,11 @@ export class WebsocketServer {
       }
     ];
 
-    return inquirer.prompt(_questions);
+    return inquirer.prompt(questions);
   }
 
   static async askForServer() {
-    const _questions = [
+    const questions = [
       {
         type: 'list',
         name: 'websocket',
@@ -93,19 +102,19 @@ export class WebsocketServer {
         default: ['All']
       }
     ];
-    return inquirer.prompt(_questions);
+    return inquirer.prompt(questions);
   }
 
   async connect() {
-    const _spinner = new Spinner(
-      `opening connection on ${this._server.name} WebSocket server... `
+    const spinner = new Spinner(
+      `opening connection on ${this.#server.name} WebSocket server... `
     );
-    _spinner.start();
+    spinner.start();
 
     try {
-      await this._client.open();
+      await this.#client.open();
       console.log(
-        chalk.grey(`connection to ${this._server.name} WebSocket server`),
+        chalk.grey(`connection to ${this.#server.name} WebSocket server`),
         chalk.grey('['),
         chalk.green('OK'),
         chalk.grey(']')
@@ -115,69 +124,140 @@ export class WebsocketServer {
       process.exit();
     }
 
-    _spinner.stop();
+    spinner.stop();
+    this.#record();
+  }
 
+  async #record() {
+    let writeStream;
     try {
-      const writeStream = fs.createWriteStream(
-        path.join(this._destination, `${this._server.name}.json`)
+      writeStream = fs.createWriteStream(
+        path.join(this.#destination, `${this.#server.name}.json`)
       );
+    } catch (error) {
+      ConsoleHelper.printError(`creating ${this.#server.name}.json file failed`, error);
+      process.exit();
+    }
 
-      let spinner;
+    let spinner;
 
-      if (!(this._delay === null)) {
-        let value = this._delay;
+    const pluralForm = this.#multiple ? 's' : '';
 
-        spinner = new Spinner(`writing to file...`);
-        spinner.start();
+    if (!(this.#delay === null)) {
+      let value = this.#delay;
 
-        const interval = setInterval(() => {
-          value--;
+      spinner = new Spinner(`writing to file${pluralForm}...`);
+      spinner.start();
 
-          if (value > 0) {
-            spinner.message(`writing to file... ${value}s remaining`);
+      const interval = setInterval(() => {
+        value--;
+
+        if (value > 0) {
+          spinner.message(`writing to file${pluralForm}... ${value}s remaining`);
+
+          try {
             writeStream.write(`{"message": "data-${value}"}\n`);
-          } else {
-            spinner.stop();
-            clearInterval(interval);
-
-            writeStream.write('{"message": "complete"}\n');
-            writeStream.end(async () => {
-              writeStream.close();
-              writeStream.addListener('close', async () => {
-                await this._client.close();
-                console.log(chalk.greenBright(`i recording complete`));
-                process.exit();
-              });
-            });
+          } catch (error) {
+            ConsoleHelper.printError(
+              `writing to ${this.#server.name}.json file failed`,
+              error
+            );
           }
-        }, 1000);
-      } else {
-        spinner = new Spinner(`writing to file... (ctrl+c to stop)`);
-        spinner.start();
+        } else {
+          spinner.stop();
+          clearInterval(interval);
 
-        writeStream.write('{"message": "data"}\n');
+          try {
+            writeStream.write('{"message": "complete"}\n');
+          } catch (error) {
+            ConsoleHelper.printError(
+              `writing to ${this.#server.name}.json file failed`,
+              error
+            );
+          }
 
-        process.stdin.resume();
-        process.on('SIGINT', () => {
-          writeStream.write('{"message": "complete"}\n');
           writeStream.end(async () => {
-            writeStream.close();
+            try {
+              writeStream.close();
+            } catch (error) {
+              ConsoleHelper.printError(
+                `closing ${this.#server.name}.json file failed`,
+                error
+              );
+            }
+
             writeStream.addListener('close', async () => {
-              await this._client.close();
+              try {
+                await this.#client.close();
+              } catch (error) {
+                ConsoleHelper.printError(
+                  `closing connection to ${this.#server.name} WebSocket server failed`,
+                  error
+                );
+              }
+
+              console.log(chalk.greenBright(`i recording complete`));
               process.exit();
             });
           });
-        });
+        }
+      }, 1000);
+    } else {
+      spinner = new Spinner(`writing to file${pluralForm}... (ctrl+c to stop)`);
+      spinner.start();
+
+      try {
+        writeStream.write('{"message": "data"}\n');
+      } catch (error) {
+        ConsoleHelper.printError(
+          `writing to ${this.#server.name}.json file failed`,
+          error
+        );
       }
 
-      // this._client.send(JSON.stringify({ event: 'subscribe', stocks: ['DP', 'H'] }));
+      process.stdin.resume();
+      process.on('SIGINT', () => {
+        try {
+          writeStream.write('{"message": "complete"}\n');
+        } catch (error) {
+          ConsoleHelper.printError(
+            `writing to ${this.#server.name}.json file failed`,
+            error
+          );
+        }
 
-      // this._client.onMessage.addListener(data => {
-      //   writeStream.write(data);
-      // });
-    } catch (error) {
-      console.log(chalk.grey('['), chalk.red(error), chalk.grey(']'));
-      process.exit();
+        writeStream.end(async () => {
+          try {
+            writeStream.close();
+          } catch (error) {
+            ConsoleHelper.printError(
+              `closing ${this.#server.name}.json file failed`,
+              error
+            );
+          }
+
+          writeStream.addListener('close', async () => {
+            try {
+              await this.#client.close();
+            } catch (error) {
+              ConsoleHelper.printError(
+                `closing connection to ${this.#server.name} WebSocket server failed`,
+                error
+              );
+            }
+
+            process.exit();
+          });
+        });
+      });
     }
+
+    /**
+     * Usage example :
+     */
+    // this.#client.send(JSON.stringify({ event: 'subscribe', stocks: ['DP', 'H'] }));
+    // this.#client.onMessage.addListener(data => {
+    //   writeStream.write(data);
+    // });
   }
 }

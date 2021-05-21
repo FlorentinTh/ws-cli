@@ -19,13 +19,13 @@ const OUTPUT_PATH = path.join(
   ConsoleHelper.printAppTitle(process.env.npm_package_name);
   ConsoleHelper.printAppDescription();
 
-  const _enableDelayAnswer = await WebsocketServer._askEnableDelay();
+  const enableDelayAnswer = await WebsocketServer.askEnableDelay();
 
   let delay = null;
   let timeInfo = '';
 
-  if (_enableDelayAnswer.enable) {
-    const delayValueAnswer = await WebsocketServer._askDelayValue();
+  if (enableDelayAnswer.enable) {
+    const delayValueAnswer = await WebsocketServer.askDelayValue();
     delay = delayValueAnswer.value;
     timeInfo += `${delay}s`;
   }
@@ -41,10 +41,13 @@ const OUTPUT_PATH = path.join(
   const serverAnswer = await WebsocketServer.askForServer();
   const serverConfiguration = {
     delay: delay,
-    destination: destination
+    destination: destination,
+    multiple: false
   };
 
   if (serverAnswer.websocket === 'All') {
+    serverConfiguration.multiple = true;
+
     for (const server of serverList) {
       serverConfiguration.server = server;
       const websocketServer = new WebsocketServer(serverConfiguration);

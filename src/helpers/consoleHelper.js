@@ -8,16 +8,23 @@ class ConsoleHelper {
   }
 
   static printAppTitle(title) {
-    return console.log(
-      chalk.white(figlet.textSync(title, { horizontalLayout: 'fitted' }))
-    );
+    console.log(chalk.white(figlet.textSync(title, { horizontalLayout: 'fitted' })));
   }
 
   static printAppDescription() {
-    return console.log(
+    console.log(
       chalk.white(
         `This CLI allows you to record data from every WebSocket available in the LIARA laboratory.\n`
       )
+    );
+  }
+
+  static printError(message, error) {
+    console.log(
+      chalk.grey('['),
+      chalk.red(`error`),
+      chalk.grey(']'),
+      chalk.white(`: ${message}. Reason: ${error}`)
     );
   }
 }
