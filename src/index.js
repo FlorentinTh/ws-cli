@@ -42,27 +42,21 @@ const OUTPUT_PATH = path.join(
   const serverConfiguration = {
     delay: delay,
     destination: destination,
-    multiple: false
+    servers: []
   };
 
   if (serverAnswer.websocket === 'All') {
-    serverConfiguration.multiple = true;
-
-    for (const server of serverList) {
-      serverConfiguration.server = server;
-      const websocketServer = new WebsocketServer(serverConfiguration);
-      await websocketServer.connect();
-    }
+    serverConfiguration.servers = serverList;
   } else {
     if (serverList.some(server => server.name === serverAnswer.websocket)) {
-      serverConfiguration.server = serverList.find(
-        server => server.name === serverAnswer.websocket
+      serverConfiguration.servers.push(
+        serverList.find(server => server.name === serverAnswer.websocket)
       );
-
-      const websocketServer = new WebsocketServer(serverConfiguration);
-      await websocketServer.connect();
     } else {
       console.log(chalk.red(`No WebSocket server for ${serverAnswer.websocket} found.`));
     }
   }
+
+  const websocketServer = new WebsocketServer(serverConfiguration);
+  await websocketServer.connect();
 })();

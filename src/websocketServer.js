@@ -33,9 +33,7 @@ export const serverList = [
 export class WebsocketServer {
   #delay;
   #destination;
-  #server;
-  #client;
-  #multiple;
+  #servers;
 
   constructor(configuration) {
     if (!(configuration instanceof Object) && !(configuration === null)) {
@@ -44,20 +42,21 @@ export class WebsocketServer {
 
     this.#delay = configuration.delay;
     this.#destination = configuration.destination;
-    this.#server = configuration.server;
-    this.#multiple = configuration.multiple;
+    this.#servers = configuration.servers;
 
-    const protocol = this.#server.secured ? 'wss://' : 'ws://';
+    for (const server of this.#servers) {
+      const protocol = server.secured ? 'wss://' : 'ws://';
 
-    this.#client = new WebSocketClient(
-      `${protocol}${this.#server.host}:${this.#server.port}/`,
-      {
-        createWebSocket: url => new WebSocket(url),
-        extractMessageData: event => event,
-        packMessage: data => JSON.stringify(data),
-        unpackMessage: data => JSON.parse(data)
-      }
-    );
+      server.connection = new WebSocketClient(
+        `${protocol}${server.host}:${server.port}/`,
+        {
+          createWebSocket: url => new WebSocket(url),
+          extractMessageData: event => event,
+          packMessage: data => JSON.stringify(data),
+          unpackMessage: data => JSON.parse(data)
+        }
+      );
+    }
   }
 
   static async askEnableDelay() {
@@ -106,158 +105,145 @@ export class WebsocketServer {
   }
 
   async connect() {
-    const spinner = new Spinner(
-      `opening connection on ${this.#server.name} WebSocket server... `
-    );
-    spinner.start();
-
-    try {
-      await this.#client.open();
-      console.log(
-        chalk.grey(`connection to ${this.#server.name} WebSocket server`),
-        chalk.grey('['),
-        chalk.green('OK'),
-        chalk.grey(']')
+    for (const server of this.#servers) {
+      const spinner = new Spinner(
+        `opening connection on ${server.name} WebSocket server... `
       );
-    } catch (error) {
-      console.log(chalk.grey('['), chalk.red(`ERROR`), chalk.grey(']'));
-      process.exit();
-    }
-
-    spinner.stop();
-    this.#record();
-  }
-
-  async #record() {
-    let writeStream;
-    try {
-      writeStream = fs.createWriteStream(
-        path.join(this.#destination, `${this.#server.name}.json`)
-      );
-    } catch (error) {
-      ConsoleHelper.printError(`creating ${this.#server.name}.json file failed`, error);
-      process.exit();
-    }
-
-    let spinner;
-
-    const pluralForm = this.#multiple ? 's' : '';
-
-    if (!(this.#delay === null)) {
-      let value = this.#delay;
-
-      spinner = new Spinner(`writing to file${pluralForm}...`);
-      spinner.start();
-
-      const interval = setInterval(() => {
-        value--;
-
-        if (value > 0) {
-          spinner.message(`writing to file${pluralForm}... ${value}s remaining`);
-
-          try {
-            writeStream.write(`{"message": "data-${value}"}\n`);
-          } catch (error) {
-            ConsoleHelper.printError(
-              `writing to ${this.#server.name}.json file failed`,
-              error
-            );
-          }
-        } else {
-          spinner.stop();
-          clearInterval(interval);
-
-          try {
-            writeStream.write('{"message": "complete"}\n');
-          } catch (error) {
-            ConsoleHelper.printError(
-              `writing to ${this.#server.name}.json file failed`,
-              error
-            );
-          }
-
-          writeStream.end(async () => {
-            try {
-              writeStream.close();
-            } catch (error) {
-              ConsoleHelper.printError(
-                `closing ${this.#server.name}.json file failed`,
-                error
-              );
-            }
-
-            writeStream.addListener('close', async () => {
-              try {
-                await this.#client.close();
-              } catch (error) {
-                ConsoleHelper.printError(
-                  `closing connection to ${this.#server.name} WebSocket server failed`,
-                  error
-                );
-              }
-
-              console.log(chalk.greenBright(`i recording complete`));
-              process.exit();
-            });
-          });
-        }
-      }, 1000);
-    } else {
-      spinner = new Spinner(`writing to file${pluralForm}... (ctrl+c to stop)`);
       spinner.start();
 
       try {
-        writeStream.write('{"message": "data"}\n');
-      } catch (error) {
-        ConsoleHelper.printError(
-          `writing to ${this.#server.name}.json file failed`,
-          error
+        await server.connection.open();
+        console.log(
+          chalk.grey(`connection to ${server.name} WebSocket server`),
+          chalk.grey('['),
+          chalk.green('OK'),
+          chalk.grey(']')
         );
+      } catch (error) {
+        console.log(chalk.grey('['), chalk.red(`ERROR`), chalk.grey(']'));
+        process.exit();
       }
 
-      process.stdin.resume();
-      process.on('SIGINT', () => {
-        try {
-          writeStream.write('{"message": "complete"}\n');
-        } catch (error) {
-          ConsoleHelper.printError(
-            `writing to ${this.#server.name}.json file failed`,
-            error
-          );
-        }
+      spinner.stop();
 
-        writeStream.end(async () => {
-          try {
-            writeStream.close();
-          } catch (error) {
-            ConsoleHelper.printError(
-              `closing ${this.#server.name}.json file failed`,
-              error
-            );
-          }
+      try {
+        server.stream = fs.createWriteStream(
+          path.join(this.#destination, `${server.name}.json`)
+        );
+      } catch (error) {
+        ConsoleHelper.printError(`creating ${server.name}.json file failed`, error);
+        process.exit();
+      }
+    }
+    this.#write();
+  }
 
-          writeStream.addListener('close', async () => {
+  async #write() {
+    for (const server of this.#servers) {
+      let spinner;
+      const pluralForm = this.#servers.length > 1 ? 's' : '';
+
+      if (!(this.#delay === null)) {
+        let value = this.#delay;
+
+        spinner = new Spinner(`writing to file${pluralForm}...`);
+        spinner.start();
+
+        const interval = setInterval(async () => {
+          value--;
+
+          if (value > 0) {
+            spinner.message(`writing to file${pluralForm}... ${value}s remaining`);
+
             try {
-              await this.#client.close();
+              server.stream.write(`{"message": "data-${value}"}\n`);
             } catch (error) {
               ConsoleHelper.printError(
-                `closing connection to ${this.#server.name} WebSocket server failed`,
+                `writing to ${server.name}.json file failed`,
                 error
               );
             }
+          } else {
+            spinner.stop();
+            clearInterval(interval);
 
+            try {
+              server.stream.write('{"message": "complete"}\n');
+              server.stream.close();
+              await server.connection.close();
+            } catch (error) {
+              ConsoleHelper.printError(`closing ${server.name}.json file failed`, error);
+            }
+
+            console.log(chalk.greenBright(`i recording complete`));
             process.exit();
+          }
+        }, 1000);
+      } else {
+        spinner = new Spinner(`writing to file${pluralForm}... (ctrl+c to stop)`);
+        spinner.start();
+
+        try {
+          server.stream.write('{"message": "data"}\n');
+        } catch (error) {
+          ConsoleHelper.printError(`writing to ${server.name}.json file failed`, error);
+        }
+
+        if (process.platform === 'win32') {
+          const rl = require('readline').createInterface({
+            input: process.stdin,
+            output: process.stdout
           });
+
+          rl.on('SIGINT', () => {
+            process.emit('SIGINT');
+          });
+        }
+
+        process.on('SIGINT', async () => {
+          try {
+            for await (const server of this.#servers) {
+              server.stream.write('{"message": "complete"}\n', async () => {
+                server.stream.end(() => {
+                  try {
+                    server.stream.close();
+                  } catch (error) {
+                    ConsoleHelper.printError(
+                      `closing ${server.name}.json file failed`,
+                      error
+                    );
+                  }
+                });
+
+                server.stream.addListener('close', async () => {
+                  try {
+                    await server.connection.close();
+                  } catch (error) {
+                    ConsoleHelper.printError(
+                      `closing connection to ${server.name} WebSocket server failed`,
+                      error
+                    );
+                  }
+                });
+              });
+            }
+
+            process.stdout.write('\n');
+            console.log(chalk.greenBright(`i recording complete`));
+            process.exit();
+          } catch (error) {
+            ConsoleHelper.printError(`closing ${server.name}.json file failed`, error);
+          }
         });
-      });
+      }
     }
 
     /**
      * Usage example :
+     *   this.#client.send(JSON.stringify({ event: 'subscribe', stocks: ['DP', 'H'] }));
+     *   this.#client.onMessage.addListener(data => {
+     *     writeStream.write(data);
+     *   });
      */
-    // this.#client.send(JSON.stringify({ event: 'subscribe', stocks: ['DP', 'H'] }));
-    // this.#client.onMessage.addListener(data => {
-    //   writeStream.write(data);
-    // });
   }
 }
