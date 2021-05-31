@@ -11,6 +11,13 @@ class OptionsHelper {
         demandOption: false,
         default: 'servers.yml'
       })
+      .option('default', {
+        alias: 'd',
+        describe: `Automatically respond to questions with default values`,
+        type: 'boolean',
+        default: false,
+        demandOption: false
+      })
       .help()
       .option('no-sanitize', {
         describe: `Disable default sanitization of both first and last seconds of recording`,
@@ -25,14 +32,7 @@ class OptionsHelper {
         default: false,
         demandOption: false
       })
-      .version()
-      .option('yes', {
-        alias: 'y',
-        describe: `Accept all questions with default values`,
-        type: 'boolean',
-        default: false,
-        demandOption: false
-      }).argv;
+      .version().argv;
   }
 
   static #searchOption(option) {
