@@ -1,0 +1,14 @@
+- name: RFID
+  host: 127.0.0.1
+  port: '8080'
+  secured: false
+
+- name: Energetic
+  host: 127.0.0.1
+  port: '8081'
+  secured: false
+
+- name: UWB
+  host: 127.0.0.1
+  port: '8082'
+  secured: false

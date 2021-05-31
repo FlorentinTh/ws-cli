@@ -1,12 +1,15 @@
+#!/usr/bin/env node
+
 import path from 'path';
 
 import chalk from 'chalk';
 import { getDesktopFolder } from 'platform-folders';
 
 import FileHelper from './helpers/fileHelper';
-
+import OptionsHelper from './helpers/optionsHelper';
+import QuestionsHelper from './helpers/questionsHelper';
 import ConsoleHelper from './helpers/consoleHelper';
-import { serverList, WebsocketServer } from './websocketServer';
+import { WebsocketServer } from './websocketServer';
 
 const OUTPUT_PATH = path.join(
   getDesktopFolder(),
@@ -15,22 +18,38 @@ const OUTPUT_PATH = path.join(
 
 (async () => {
   ConsoleHelper.clear();
-
-  ConsoleHelper.printAppTitle(process.env.npm_package_name);
+  ConsoleHelper.printAppTitle(FileHelper.currentDirectory);
   ConsoleHelper.printAppDescription();
 
-  const enableDelayAnswer = await WebsocketServer.askEnableDelay();
+  const options = OptionsHelper.options;
+
+  const serverListFilePath = !OptionsHelper.isOptionSet('configuration')
+    ? `./${options.configuration}`
+    : options.configuration;
+
+  const serverList = await FileHelper.getServerList(serverListFilePath);
+
+  const enableDelayAnswer = OptionsHelper.isOptionSet('yes')
+    ? false
+    : await QuestionsHelper.askEnableDelay();
 
   let delay = null;
   let timeInfo = '';
 
   if (enableDelayAnswer.enable) {
-    const delayValueAnswer = await WebsocketServer.askDelayValue();
+    const delayValueAnswer = await QuestionsHelper.askDelayValue();
     delay = delayValueAnswer.value;
     timeInfo += `${delay}s`;
   }
 
-  const fileHelper = new FileHelper(OUTPUT_PATH);
+  const labelOption = OptionsHelper.isOptionSet('label');
+  let label = null;
+
+  if (labelOption) {
+    label = (await QuestionsHelper.askAnnotationLabel()).label.trim();
+  }
+
+  const fileHelper = new FileHelper(OUTPUT_PATH, label);
   const destination = fileHelper.destinationDirectory;
 
   console.log(
@@ -38,10 +57,11 @@ const OUTPUT_PATH = path.join(
     chalk.cyan(`your ${timeInfo} recordings will be saved to ${destination}`)
   );
 
-  const serverAnswer = await WebsocketServer.askForServer();
+  const serverAnswer = await QuestionsHelper.askForServer(serverList);
   const serverConfiguration = {
     delay: delay,
     destination: destination,
+    sanitize: OptionsHelper.isOptionSet('no-sanitize'),
     servers: []
   };
 

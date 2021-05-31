@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 
-import inquirer from 'inquirer';
 import { Spinner } from 'clui';
 import chalk from 'chalk';
 import WebSocketClient from 'websocket-as-promised';
@@ -9,30 +8,10 @@ import WebSocket from 'ws';
 
 import ConsoleHelper from './helpers/consoleHelper';
 
-export const serverList = [
-  {
-    name: 'RFID',
-    host: '127.0.0.1',
-    port: '8080',
-    secured: false
-  },
-  {
-    name: 'Energetic',
-    host: '127.0.0.1',
-    port: '8081',
-    secured: false
-  },
-  {
-    name: 'UWB',
-    host: '127.0.0.1',
-    port: '8082',
-    secured: false
-  }
-];
-
 export class WebsocketServer {
   #delay;
   #destination;
+  #sanitize;
   #servers;
 
   constructor(configuration) {
@@ -42,6 +21,7 @@ export class WebsocketServer {
 
     this.#delay = configuration.delay;
     this.#destination = configuration.destination;
+    this.#sanitize = configuration.sanitize;
     this.#servers = configuration.servers;
 
     for (const server of this.#servers) {
@@ -57,51 +37,6 @@ export class WebsocketServer {
         }
       );
     }
-  }
-
-  static async askEnableDelay() {
-    const questions = [
-      {
-        type: 'confirm',
-        name: 'enable',
-        message: 'do you want your record to be stopped after a fixed period of time?',
-        default: false
-      }
-    ];
-
-    return inquirer.prompt(questions);
-  }
-
-  static async askDelayValue() {
-    const questions = [
-      {
-        type: 'input',
-        name: 'value',
-        message: 'how long does the recording should last in seconds?',
-        validate: input => {
-          if (isNaN(input) || input <= 0) {
-            return 'please enter a valid number greater than 0';
-          }
-
-          return true;
-        }
-      }
-    ];
-
-    return inquirer.prompt(questions);
-  }
-
-  static async askForServer() {
-    const questions = [
-      {
-        type: 'list',
-        name: 'websocket',
-        message: 'select a WebSocket server:',
-        choices: ['All', 'RFID', 'Energetic', 'UWB'],
-        default: ['All']
-      }
-    ];
-    return inquirer.prompt(questions);
   }
 
   async connect() {
@@ -176,7 +111,13 @@ export class WebsocketServer {
             }
 
             console.log(chalk.greenBright(`i recording complete`));
-            process.exit();
+
+            if (this.#sanitize) {
+              /**
+               * TODO
+               */
+            }
+            process.exit(); // should be removed;
           }
         }, 1000);
       } else {
@@ -230,7 +171,13 @@ export class WebsocketServer {
 
             process.stdout.write('\n');
             console.log(chalk.greenBright(`i recording complete`));
-            process.exit();
+            // process.exit();
+            if (this.#sanitize) {
+              /**
+               * TODO
+               */
+            }
+            process.exit(); // should be removed
           } catch (error) {
             ConsoleHelper.printError(`closing ${server.name}.json file failed`, error);
           }
