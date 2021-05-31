@@ -14,6 +14,19 @@ class QuestionsHelper {
     return inquirer.prompt(questions);
   }
 
+  static async askOverride() {
+    const questions = [
+      {
+        type: 'confirm',
+        name: 'override',
+        message: 'Do you want to override previous record with the same label?',
+        default: false
+      }
+    ];
+
+    return inquirer.prompt(questions);
+  }
+
   static async askDelayValue() {
     const questions = [
       {
@@ -33,7 +46,7 @@ class QuestionsHelper {
     return inquirer.prompt(questions);
   }
 
-  static async askAnnotationLabel() {
+  static async askLabelValue() {
     const questions = [
       {
         type: 'input',

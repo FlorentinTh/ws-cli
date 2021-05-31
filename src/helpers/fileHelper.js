@@ -12,7 +12,33 @@ class FileHelper {
   constructor(outputPath, label) {
     const folderName = label === null ? dayjs().format('YYYYMMDDHHmmss') : label;
     this.#destDir = path.join(outputPath, folderName);
-    fs.mkdirSync(this.#destDir, { recursive: true });
+  }
+
+  get destinationDirectory() {
+    return this.#destDir;
+  }
+
+  async init() {
+    try {
+      await fs.promises.access(this.#destDir);
+      return false;
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        try {
+          await fs.promises.mkdir(this.#destDir, { recursive: true });
+          return true;
+        } catch (error) {
+          ConsoleHelper.printError(`creating directory ${this.#destDir} failed`, error);
+          process.exit();
+        }
+      } else {
+        ConsoleHelper.printError(
+          `try accessing directory ${this.#destDir} failed`,
+          error
+        );
+        process.exit();
+      }
+    }
   }
 
   static get currentDirectory() {
@@ -30,10 +56,6 @@ class FileHelper {
       );
       process.exit();
     }
-  }
-
-  get destinationDirectory() {
-    return this.#destDir;
   }
 }
 

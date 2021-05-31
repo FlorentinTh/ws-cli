@@ -16,6 +16,27 @@ const OUTPUT_PATH = path.join(
   FileHelper.currentDirectory + '_output'
 );
 
+async function initRecordingFolder(labelOption) {
+  let label = null;
+
+  if (labelOption) {
+    label = (await QuestionsHelper.askLabelValue()).label.trim();
+  }
+
+  const fileHelper = new FileHelper(OUTPUT_PATH, label);
+  const init = await fileHelper.init();
+
+  if (!init) {
+    const overrideAnswer = await QuestionsHelper.askOverride();
+
+    if (!overrideAnswer.override) {
+      return initRecordingFolder(labelOption);
+    }
+  }
+
+  return fileHelper.destinationDirectory;
+}
+
 (async () => {
   ConsoleHelper.clear();
   ConsoleHelper.printAppTitle(FileHelper.currentDirectory);
@@ -43,14 +64,7 @@ const OUTPUT_PATH = path.join(
   }
 
   const labelOption = OptionsHelper.isOptionSet('label');
-  let label = null;
-
-  if (labelOption) {
-    label = (await QuestionsHelper.askAnnotationLabel()).label.trim();
-  }
-
-  const fileHelper = new FileHelper(OUTPUT_PATH, label);
-  const destination = fileHelper.destinationDirectory;
+  const destination = await initRecordingFolder(labelOption);
 
   console.log(
     chalk.greenBright('i'),
