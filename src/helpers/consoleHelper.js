@@ -19,12 +19,23 @@ class ConsoleHelper {
     );
   }
 
-  static printError(message, error) {
+  static printError(message, error = null) {
+    if (!Object.prototype.toString.call(message) === '[object String]') {
+      this.printError(`Error message must be a string`);
+      process.exit(1);
+    }
+
+    let errorMsg = '';
+
+    if (!(error === null)) {
+      errorMsg = `Reason: ${error}`;
+    }
+
     console.log(
       chalk.grey('['),
       chalk.red(`error`),
       chalk.grey(']'),
-      chalk.white(`: ${message}. Reason: ${error}`)
+      chalk.white(`: ${message}. ${errorMsg}\n`)
     );
   }
 }
