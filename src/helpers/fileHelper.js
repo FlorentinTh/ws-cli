@@ -29,20 +29,32 @@ class FileHelper {
           return true;
         } catch (error) {
           ConsoleHelper.printError(`creating directory ${this.#destDir} failed`, error);
-          process.exit();
+          process.exit(1);
         }
       } else {
         ConsoleHelper.printError(
           `try accessing directory ${this.#destDir} failed`,
           error
         );
-        process.exit();
+        process.exit(1);
       }
     }
   }
 
-  static get currentDirectory() {
-    return path.basename(process.cwd());
+  static async isConfigurationFileExists(filePath) {
+    if (!Object.prototype.toString.call(filePath) === '[object String]') {
+      ConsoleHelper.printError(`Configuration file path argument must be a string`);
+      process.exit(1);
+    }
+
+    try {
+      await fs.promises.access(filePath);
+      return true;
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        return false;
+      }
+    }
   }
 
   static async getServerList(filePath) {
@@ -54,7 +66,7 @@ class FileHelper {
         `reading WebSocket servers configuration file failed`,
         error
       );
-      process.exit();
+      process.exit(1);
     }
   }
 }
