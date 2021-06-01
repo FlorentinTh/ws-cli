@@ -56,7 +56,7 @@ export class WebsocketServer {
         );
       } catch (error) {
         console.log(chalk.grey('['), chalk.red(`ERROR`), chalk.grey(']'));
-        process.exit();
+        process.exit(1);
       }
 
       spinner.stop();
@@ -67,7 +67,7 @@ export class WebsocketServer {
         );
       } catch (error) {
         ConsoleHelper.printError(`creating ${server.name}.json file failed`, error);
-        process.exit();
+        process.exit(1);
       }
     }
     this.#write();
@@ -117,7 +117,7 @@ export class WebsocketServer {
                * TODO
                */
             }
-            process.exit(); // should be removed;
+            process.exit(0); // should be removed;
           }
         }, 1000);
       } else {
@@ -177,7 +177,7 @@ export class WebsocketServer {
                * TODO
                */
             }
-            process.exit(); // should be removed
+            process.exit(0); // should be removed
           } catch (error) {
             ConsoleHelper.printError(`closing ${server.name}.json file failed`, error);
           }
