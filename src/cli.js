@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import path from 'path';
 
 import chalk from 'chalk';
@@ -11,10 +9,9 @@ import QuestionsHelper from './helpers/questionsHelper';
 import ConsoleHelper from './helpers/consoleHelper';
 import { WebsocketServer } from './websocketServer';
 
-const OUTPUT_PATH = path.join(
-  getDesktopFolder(),
-  FileHelper.currentDirectory + '_output'
-);
+const APP_NAME = path.basename(process.argv[1]);
+
+const OUTPUT_PATH = path.join(getDesktopFolder(), APP_NAME + '_output');
 
 async function initRecordingFolder(labelOption) {
   let label = null;
@@ -37,9 +34,9 @@ async function initRecordingFolder(labelOption) {
   return fileHelper.destinationDirectory;
 }
 
-(async () => {
+export async function cli() {
   ConsoleHelper.clear();
-  ConsoleHelper.printAppTitle(FileHelper.currentDirectory);
+  ConsoleHelper.printAppTitle(APP_NAME);
   ConsoleHelper.printAppDescription();
 
   const options = OptionsHelper.options;
@@ -47,6 +44,15 @@ async function initRecordingFolder(labelOption) {
   const serverListFilePath = !OptionsHelper.isOptionSet('configuration')
     ? `./${options.configuration}`
     : options.configuration;
+
+  const configurationFileExists = await FileHelper.isConfigurationFileExists(
+    path.normalize(serverListFilePath)
+  );
+
+  if (!configurationFileExists) {
+    ConsoleHelper.printError(`File describing servers to connect to not found`);
+    process.exit(1);
+  }
 
   const serverList = await FileHelper.getServerList(serverListFilePath);
 
@@ -93,4 +99,4 @@ async function initRecordingFolder(labelOption) {
 
   const websocketServer = new WebsocketServer(serverConfiguration);
   await websocketServer.connect();
-})();
+}
