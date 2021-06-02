@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Universal WS recorder app for LIARA Laboratory",
   "scripts": {
-    "clean": "rimraf build",
+    "clean": "rimraf build dist",
     "copy": "cpy package.json bin build --parents",
     "compile": "babel src --out-dir build/src",
     "install": "npm install --prefix ./build --only=prod",
