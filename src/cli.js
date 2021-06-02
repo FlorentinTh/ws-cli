@@ -41,7 +41,7 @@ export async function cli() {
 
   const argv = CommandHelper.argv;
 
-  const serverListFilePath = !CommandHelper.isargvet('conf')
+  const serverListFilePath = !CommandHelper.isOptionSet('conf')
     ? `./${argv.conf}`
     : argv.conf;
 
@@ -56,7 +56,7 @@ export async function cli() {
 
   const serverList = await FileHelper.getServerList(serverListFilePath);
 
-  const enableDelayAnswer = CommandHelper.isargvet('yes')
+  const enableDelayAnswer = CommandHelper.isOptionSet('yes')
     ? false
     : await QuestionsHelper.askEnableDelay();
 
@@ -69,7 +69,7 @@ export async function cli() {
     timeInfo += `${delay}s`;
   }
 
-  const labelOption = CommandHelper.isargvet('label');
+  const labelOption = CommandHelper.isOptionSet('label');
   const destination = await initRecordingFolder(labelOption);
 
   console.log(
@@ -81,7 +81,7 @@ export async function cli() {
   const serverConfiguration = {
     delay: delay,
     destination: destination,
-    sanitize: CommandHelper.isargvet('no-sanitize'),
+    sanitize: CommandHelper.isOptionSet('no-sanitize'),
     servers: []
   };
 
