@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import { getDesktopFolder } from 'platform-folders';
 
 import FileHelper from './helpers/fileHelper';
-import OptionsHelper from './helpers/optionsHelper';
+import CommandHelper from './helpers/commandHelper';
 import QuestionsHelper from './helpers/questionsHelper';
 import ConsoleHelper from './helpers/consoleHelper';
 import { WebsocketServer } from './websocketServer';
@@ -39,11 +39,11 @@ export async function cli() {
   ConsoleHelper.printAppTitle(APP_NAME);
   ConsoleHelper.printAppDescription();
 
-  const options = OptionsHelper.options;
+  const argv = CommandHelper.argv;
 
-  const serverListFilePath = !OptionsHelper.isOptionSet('configuration')
-    ? `./${options.configuration}`
-    : options.configuration;
+  const serverListFilePath = !CommandHelper.isargvet('conf')
+    ? `./${argv.conf}`
+    : argv.conf;
 
   const configurationFileExists = await FileHelper.isConfigurationFileExists(
     path.normalize(serverListFilePath)
@@ -56,7 +56,7 @@ export async function cli() {
 
   const serverList = await FileHelper.getServerList(serverListFilePath);
 
-  const enableDelayAnswer = OptionsHelper.isOptionSet('yes')
+  const enableDelayAnswer = CommandHelper.isargvet('yes')
     ? false
     : await QuestionsHelper.askEnableDelay();
 
@@ -69,7 +69,7 @@ export async function cli() {
     timeInfo += `${delay}s`;
   }
 
-  const labelOption = OptionsHelper.isOptionSet('label');
+  const labelOption = CommandHelper.isargvet('label');
   const destination = await initRecordingFolder(labelOption);
 
   console.log(
@@ -81,7 +81,7 @@ export async function cli() {
   const serverConfiguration = {
     delay: delay,
     destination: destination,
-    sanitize: OptionsHelper.isOptionSet('no-sanitize'),
+    sanitize: CommandHelper.isargvet('no-sanitize'),
     servers: []
   };
 
