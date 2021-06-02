@@ -6,6 +6,8 @@
     "clean": "rimraf build dist",
     "copy": "cpy package.json bin build --parents",
     "compile": "babel src --out-dir build/src",
+    "start": "npm-run-all clean copy compile",
+    "link": "cd build && npm link",
     "install": "npm install --prefix ./build --only=prod",
     "package": "pkg ./build/package.json",
     "build": "npm-run-all clean copy compile install package",
