@@ -4,7 +4,7 @@ import fs from 'fs';
 import dayjs from 'dayjs';
 import yaml from 'js-yaml';
 
-import ConsoleHelper from './consoleHelper';
+import { Tags, ConsoleHelper } from './consoleHelper';
 
 class FileHelper {
   #destDir;
@@ -28,13 +28,18 @@ class FileHelper {
           await fs.promises.mkdir(this.#destDir, { recursive: true });
           return true;
         } catch (error) {
-          ConsoleHelper.printError(`creating directory ${this.#destDir} failed`, error);
+          ConsoleHelper.printMessage(
+            Tags.ERROR,
+            `creating directory ${this.#destDir} failed`,
+            error.message || null
+          );
           process.exit(1);
         }
       } else {
-        ConsoleHelper.printError(
+        ConsoleHelper.printMessage(
+          Tags.ERROR,
           `try accessing directory ${this.#destDir} failed`,
-          error
+          error.message || null
         );
         process.exit(1);
       }
@@ -43,7 +48,10 @@ class FileHelper {
 
   static async isConfigurationFileExists(filePath) {
     if (!Object.prototype.toString.call(filePath) === '[object String]') {
-      ConsoleHelper.printError(`Configuration file path argument must be a string`);
+      ConsoleHelper.printMessage(
+        Tags.ERROR,
+        `Configuration file path argument must be a string`
+      );
       process.exit(1);
     }
 
@@ -62,9 +70,10 @@ class FileHelper {
       const serverListFile = await fs.promises.readFile(filePath, 'utf-8');
       return yaml.load(serverListFile);
     } catch (error) {
-      ConsoleHelper.printError(
+      ConsoleHelper.printMessage(
+        Tags.ERROR,
         `reading WebSocket servers configuration file failed`,
-        error
+        error.message || null
       );
       process.exit(1);
     }

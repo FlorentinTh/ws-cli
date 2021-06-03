@@ -6,7 +6,7 @@ import chalk from 'chalk';
 import WebSocketClient from 'websocket-as-promised';
 import WebSocket from 'ws';
 
-import ConsoleHelper from './helpers/consoleHelper';
+import { Tags, ConsoleHelper } from './helpers/consoleHelper';
 
 export class WebsocketServer {
   #delay;
@@ -44,6 +44,7 @@ export class WebsocketServer {
       const spinner = new Spinner(
         `opening connection on ${server.name} WebSocket server... `
       );
+
       spinner.start();
 
       try {
@@ -55,7 +56,11 @@ export class WebsocketServer {
           chalk.grey(']')
         );
       } catch (error) {
-        console.log(chalk.grey('['), chalk.red(`ERROR`), chalk.grey(']'));
+        ConsoleHelper.printMessage(
+          Tags.ERROR,
+          `impossible to open connection on ${server.name} WebSocket server`,
+          error.message || null
+        );
         process.exit(1);
       }
 
@@ -66,7 +71,11 @@ export class WebsocketServer {
           path.join(this.#destination, `${server.name}.json`)
         );
       } catch (error) {
-        ConsoleHelper.printError(`creating ${server.name}.json file failed`, error);
+        ConsoleHelper.printMessage(
+          Tags.ERROR,
+          `creating ${server.name}.json file failed`,
+          error.message || null
+        );
         process.exit(1);
       }
     }
@@ -93,9 +102,10 @@ export class WebsocketServer {
             try {
               server.stream.write(`{"message": "data-${value}"}\n`);
             } catch (error) {
-              ConsoleHelper.printError(
+              ConsoleHelper.printMessage(
+                Tags.ERROR,
                 `writing to ${server.name}.json file failed`,
-                error
+                error.message || null
               );
             }
           } else {
@@ -107,10 +117,14 @@ export class WebsocketServer {
               server.stream.close();
               await server.connection.close();
             } catch (error) {
-              ConsoleHelper.printError(`closing ${server.name}.json file failed`, error);
+              ConsoleHelper.printMessage(
+                Tags.ERROR,
+                `closing ${server.name}.json file failed`,
+                error.message || null
+              );
             }
 
-            console.log(chalk.greenBright(`i recording complete`));
+            ConsoleHelper.printMessage(Tags.OK, `recording complete`);
 
             if (this.#sanitize) {
               /**
@@ -127,7 +141,11 @@ export class WebsocketServer {
         try {
           server.stream.write('{"message": "data"}\n');
         } catch (error) {
-          ConsoleHelper.printError(`writing to ${server.name}.json file failed`, error);
+          ConsoleHelper.printMessage(
+            Tags.ERROR,
+            `writing to ${server.name}.json file failed`,
+            error.message || null
+          );
         }
 
         if (process.platform === 'win32') {
@@ -149,9 +167,10 @@ export class WebsocketServer {
                   try {
                     server.stream.close();
                   } catch (error) {
-                    ConsoleHelper.printError(
+                    ConsoleHelper.printMessage(
+                      Tags.ERROR,
                       `closing ${server.name}.json file failed`,
-                      error
+                      error.message || null
                     );
                   }
                 });
@@ -160,9 +179,10 @@ export class WebsocketServer {
                   try {
                     await server.connection.close();
                   } catch (error) {
-                    ConsoleHelper.printError(
+                    ConsoleHelper.printMessage(
+                      Tags.ERROR,
                       `closing connection to ${server.name} WebSocket server failed`,
-                      error
+                      error.message || null
                     );
                   }
                 });
@@ -170,7 +190,7 @@ export class WebsocketServer {
             }
 
             process.stdout.write('\n');
-            console.log(chalk.greenBright(`i recording complete`));
+            ConsoleHelper.printMessage(Tags.OK, `recording complete`);
             // process.exit();
             if (this.#sanitize) {
               /**
@@ -179,7 +199,11 @@ export class WebsocketServer {
             }
             process.exit(0); // should be removed
           } catch (error) {
-            ConsoleHelper.printError(`closing ${server.name}.json file failed`, error);
+            ConsoleHelper.printMessage(
+              Tags.ERROR,
+              `closing ${server.name}.json file failed`,
+              error.message || null
+            );
           }
         });
       }
