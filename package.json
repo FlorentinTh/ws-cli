@@ -10,7 +10,8 @@
     "link": "cd build && npm link",
     "install": "npm install --prefix ./build --only=prod",
     "package": "pkg ./build/package.json",
-    "build": "npm-run-all clean copy compile install package",
+    "version": "pkg-ver . dist",
+    "build": "npm-run-all clean copy compile install package version",
     "lint": "eslint ./src --ext .js,.json",
     "commit": "git-cz",
     "release": "standard-version",
@@ -69,6 +70,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.14.0",
+    "@florentinth/pkg-ver": "^1.1.1",
     "chalk": "^4.1.1",
     "clear": "^0.1.0",
     "clui": "^0.3.6",
