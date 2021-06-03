@@ -28,8 +28,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           architecture: ${{ matrix.architecture }}
-        run: npm i
-        run: npm run build
+
+      - run: npm i
+      - run: npm run build
 
       - name: Upload executables to release assets
         uses: shogo82148/actions-upload-release-asset@v1
