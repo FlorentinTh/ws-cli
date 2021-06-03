@@ -8,10 +8,12 @@
     "compile": "babel src --out-dir build/src",
     "start": "npm-run-all clean copy compile",
     "link": "cd build && npm link",
-    "install": "npm install --prefix ./build --only=prod",
+    "cd:build": "cd ./build",
+    "cd:root": "cd ..",
+    "npm:install-build": "npm install --prefix ./build --only=prod",
     "package": "pkg ./build/package.json",
     "version": "pkg-ver . dist",
-    "build": "npm-run-all clean copy compile install package version",
+    "build": "npm-run-all clean copy compile cd:build npm:install-build package cd:root version",
     "lint": "eslint ./src --ext .js,.json",
     "commit": "git-cz",
     "release": "standard-version",
@@ -70,7 +72,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.14.0",
-    "@florentinth/pkg-ver": "^1.1.1",
+    "@florentinth/pkg-ver": "^1.2.0",
     "chalk": "^4.1.1",
     "clear": "^0.1.0",
     "clui": "^0.3.6",
@@ -79,14 +81,12 @@
     "inquirer": "^8.1.0",
     "js-yaml": "^4.1.0",
     "pkg": "^5.2.1",
-    "platform-folders": "^0.5.3",
     "websocket-as-promised": "^2.0.1",
     "ws": "^7.4.6",
     "yargs": "^17.0.1"
   },
   "pkg": {
     "assets": [
-      "node_modules/platform-folders/build",
       "node_modules/figlet/fonts/*"
     ],
     "targets": [
