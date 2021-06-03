@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://github.com/FlorentinTh/ws-cli/compare/v1.1.3...v1.1.4) (2021-06-03)
+
+
+### Refactors
+
+* **commandhelper:** fix text formatting of the output of the help option ([91685aa](https://github.com/FlorentinTh/ws-cli/commit/91685aa2dc1dc68240544c1ee17d960a0b9258aa))
+* **consolehelper:** replace printError function by more generic printMessage with several tags ([27766db](https://github.com/FlorentinTh/ws-cli/commit/27766db38cf2429ea10b183de3c1270fad45a20d))
+
+
+### Performance
+
+* **platform-folders:** remove use of platform-folders external dependency in favor of native code ([5e31544](https://github.com/FlorentinTh/ws-cli/commit/5e3154424cb2ff79a890a28010e1e6a2b1264a5d))
+
+
+### CI
+
+* **workflows:** add new upload-assets workflow file that fixes all previous issues ([de25b49](https://github.com/FlorentinTh/ws-cli/commit/de25b496b241b70330f69764a3d64aacc692d7f3))
+
+
+### Build System
+
+* **npm:** update, remove deps and fix script to suit upload-assets workflow ([e652355](https://github.com/FlorentinTh/ws-cli/commit/e6523550f1a817dca7c119a72a4a605f50c9cd75))
+
+
+### Chore
+
+* **deps:** update dependencies ([b81dde4](https://github.com/FlorentinTh/ws-cli/commit/b81dde4c5e778afb9c57ec7a2477f353b9f1cf36))
+
+
+### Documentation
+
+* **readme:** update readme ([827379e](https://github.com/FlorentinTh/ws-cli/commit/827379eb0b47a104c69387f1a9edae998978d6ba))
+
 ### [1.1.3](https://github.com/FlorentinTh/ws-cli/compare/v1.1.2...v1.1.3) (2021-06-03)
 
 
