@@ -10,13 +10,13 @@ Universal WS recorder app for LIARA Laboratory.
 
 ### Simple
 
-1. Download the [latest release]() of the executable for your platform and rename it as ```ws-cli```.
+1. Download the [latest release](https://github.com/FlorentinTh/ws-cli/releases) of the executable for your platform and rename it as ```ws-cli```.
 
-2. Copy the executable and paste it somewhere safe. For example on windows it can be : ```C:/dev/ws-cli/ws-cli.exe```.
+2. Copy the executable and paste it somewhere safe. For example on windows it can be : ```C:/dev/ws-cli-[release_version]/ws-cli.exe```.
 
 3. Add the path to you environment variable :
 
-> **Note**: replace ```<ws-cli.exe_parent_directory_path>``` by your actual path. Such as ```C:/dev/ws-cli/```
+> **Note**: replace ```<ws-cli.exe_parent_directory_path>``` by your actual path. Such as ```C:/dev/ws-cli-v1.x/```
 
    - **Windows** :
      - with PowerShell :
@@ -36,7 +36,6 @@ Universal WS recorder app for LIARA Laboratory.
      ```
 
 4. The command ```ws-cli``` should now be available from anywhere through your terminal.
-
 
 ### Manual
 
@@ -72,6 +71,7 @@ Options:
                        timestamp by default           [boolean] [default: false]
       --version        Show version number                             [boolean]
 ```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
