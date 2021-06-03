@@ -1,17 +1,14 @@
 import path from 'path';
 
-import chalk from 'chalk';
-import { getDesktopFolder } from 'platform-folders';
-
 import FileHelper from './helpers/fileHelper';
 import CommandHelper from './helpers/commandHelper';
 import QuestionsHelper from './helpers/questionsHelper';
-import ConsoleHelper from './helpers/consoleHelper';
+import { Tags, ConsoleHelper } from './helpers/consoleHelper';
 import { WebsocketServer } from './websocketServer';
 
 const APP_NAME = path.basename(process.argv[1]);
-
-const OUTPUT_PATH = path.join(getDesktopFolder(), APP_NAME + '_output');
+const HOME_FOLDER = require('os').homedir();
+const OUTPUT_PATH = path.join(HOME_FOLDER, APP_NAME + '_output');
 
 async function initRecordingFolder(labelOption) {
   let label = null;
@@ -50,7 +47,10 @@ export async function cli() {
   );
 
   if (!configurationFileExists) {
-    ConsoleHelper.printError(`File describing servers to connect to not found`);
+    ConsoleHelper.printMessage(
+      Tags.ERROR,
+      `File describing servers to connect to not found`
+    );
     process.exit(1);
   }
 
@@ -72,9 +72,9 @@ export async function cli() {
   const labelOption = CommandHelper.isOptionSet('label');
   const destination = await initRecordingFolder(labelOption);
 
-  console.log(
-    chalk.greenBright('i'),
-    chalk.cyan(`your ${timeInfo} recordings will be saved to ${destination}`)
+  ConsoleHelper.printMessage(
+    Tags.INFO,
+    `your ${timeInfo} recordings will be saved to ${destination}`
   );
 
   const serverAnswer = await QuestionsHelper.askForServer(serverList);
@@ -93,7 +93,10 @@ export async function cli() {
         serverList.find(server => server.name === serverAnswer.websocket)
       );
     } else {
-      console.log(chalk.red(`No WebSocket server for ${serverAnswer.websocket} found.`));
+      ConsoleHelper.printMessage(
+        Tags.ERROR,
+        `No WebSocket server for ${serverAnswer.websocket} found.`
+      );
     }
   }
 
