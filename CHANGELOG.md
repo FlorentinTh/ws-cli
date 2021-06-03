@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/FlorentinTh/ws-cli/compare/v1.1.0...v1.1.1) (2021-06-03)
+
+
+### CI
+
+* **upload-assets:** fix an issue with upload-assets.yml file content ([c8c5f6b](https://github.com/FlorentinTh/ws-cli/commit/c8c5f6b2094ba7bbdc59866335afafc02d856aea))
+
 ## 1.1.0 (2021-06-03)
 
 
