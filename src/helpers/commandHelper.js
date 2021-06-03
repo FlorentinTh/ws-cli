@@ -4,9 +4,8 @@ class CommandHelper {
   static get argv() {
     return yargs
       .usage(
-        `
-      Usage:
-        $ ws-cli [options]`
+        `Usage:
+          $ ws-cli [options]`
       )
       .option('conf', {
         alias: 'c',
