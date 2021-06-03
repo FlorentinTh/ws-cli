@@ -29,7 +29,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           architecture: ${{ matrix.architecture }}
 
-      - run: npm i
+      - run: npm ci
       - run: npm run build
 
       - name: Upload executables to release assets
