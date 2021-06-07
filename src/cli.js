@@ -82,6 +82,7 @@ export async function cli() {
     delay: delay,
     destination: destination,
     sanitize: CommandHelper.isOptionSet('no-sanitize'),
+    labelize: labelOption,
     servers: []
   };
 
@@ -97,6 +98,8 @@ export async function cli() {
         Tags.ERROR,
         `No WebSocket server for ${serverAnswer.websocket} found.`
       );
+
+      process.exit(1);
     }
   }
 
