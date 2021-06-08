@@ -7,12 +7,13 @@ import WebSocketClient from 'websocket-as-promised';
 import WebSocket from 'ws';
 
 import { Tags, ConsoleHelper } from './helpers/consoleHelper';
+import InterruptHelper from './helpers/interruptHelper';
 import Labelizer from './labelizer';
+import Sanitizer from './sanitizer';
 
 class WebsocketServer {
   #delay;
   #destination;
-  #sanitize;
   #label;
   #servers;
 
@@ -23,7 +24,6 @@ class WebsocketServer {
 
     this.#delay = configuration.delay;
     this.#destination = configuration.destination;
-    this.#sanitize = configuration.sanitize;
     this.#label = configuration.label;
     this.#servers = configuration.servers;
 
@@ -88,26 +88,26 @@ class WebsocketServer {
   }
 
   async #write() {
-    for (const server of this.#servers) {
-      let spinner;
-      const pluralForm = this.#servers.length > 1 ? 's' : '';
+    const labelizer = new Labelizer();
+    const sanitizer = new Sanitizer();
 
-      let labelizer = null;
-      if (!(server.label === null)) {
-        labelizer = new Labelizer(server.name);
-      }
+    let spinner;
+    const pluralForm = this.#servers.length > 1 ? 's' : '';
 
-      if (!(this.#delay === null)) {
-        let value = this.#delay;
+    if (!(this.#delay === null)) {
+      let value = this.#delay;
 
-        spinner = new Spinner(`writing to file${pluralForm}...`);
-        spinner.start();
+      spinner = new Spinner(`writing to file${pluralForm}...`);
+      spinner.start();
 
+      for (const server of this.#servers) {
         server.connection.onMessage.addListener(async data => {
           try {
             if (value > 0) {
-              if (!(labelizer === null)) {
-                data = labelizer.labelize(server.label, data);
+              if (!(this.#label === null)) {
+                data = labelizer.labelize(server, this.#label, data);
+              } else {
+                data = sanitizer.format(server, data);
               }
 
               await server.stream.write(data + '\n');
@@ -120,46 +120,32 @@ class WebsocketServer {
             );
           }
         });
+      }
 
-        const interval = setInterval(async () => {
-          if (value > 0) {
-            spinner.message(`writing to file${pluralForm}... ${value}s remaining`);
-          } else {
-            spinner.stop();
-            clearInterval(interval);
+      const interval = setInterval(async () => {
+        if (value > 0) {
+          spinner.message(`writing to file${pluralForm}... ${value}s remaining`);
+        } else {
+          spinner.stop();
+          this.#close(interval);
 
-            try {
-              await server.stream.close();
-              await server.connection.close();
-            } catch (error) {
-              ConsoleHelper.printMessage(
-                Tags.ERROR,
-                `closing ${server.name}.json file failed`,
-                error.message || null
-              );
-              process.exit(1);
-            }
+          ConsoleHelper.printMessage(Tags.OK, `recording complete`);
+          process.exit(0);
+        }
 
-            ConsoleHelper.printMessage(Tags.OK, `recording complete`);
+        value--;
+      }, 1000);
+    } else {
+      spinner = new Spinner(`writing to file${pluralForm}... (Ctrl+C to stop)`);
+      spinner.start();
 
-            // if (this.#sanitize) {
-            //   /**
-            //    * TODO
-            //    */
-            // }
-
-            process.exit(0);
-          }
-          value--;
-        }, 1000);
-      } else {
-        spinner = new Spinner(`writing to file${pluralForm}... (ctrl+c to stop)`);
-        spinner.start();
-
+      for (const server of this.#servers) {
         server.connection.onMessage.addListener(async data => {
           try {
-            if (!(labelizer === null)) {
-              data = labelizer.labelize(server.label, data);
+            if (!(this.#label === null)) {
+              data = labelizer.labelize(server, this.#label, data);
+            } else {
+              data = sanitizer.format(server, data);
             }
 
             await server.stream.write(data + '\n');
@@ -172,67 +158,60 @@ class WebsocketServer {
             process.exit(1);
           }
         });
+      }
 
-        if (process.platform === 'win32') {
-          const rl = require('readline').createInterface({
-            input: process.stdin,
-            output: process.stdout
-          });
+      InterruptHelper.initWindowsInterrupt();
 
-          rl.on('SIGINT', () => {
-            process.emit('SIGINT');
-          });
+      process.on('SIGINT', async () => {
+        this.#close();
+
+        process.stdout.write('\n');
+        ConsoleHelper.printMessage(Tags.OK, `recording complete`);
+
+        process.exit(0);
+      });
+    }
+  }
+
+  async #close(intervalId = null) {
+    if (!(intervalId === null)) {
+      clearInterval(intervalId);
+
+      for (const server of this.#servers) {
+        try {
+          await server.stream.close();
+          await server.connection.close();
+        } catch (error) {
+          ConsoleHelper.printMessage(
+            Tags.ERROR,
+            `closing ${server.name}.json file failed`,
+            error.message || null
+          );
+          process.exit(1);
+        }
+      }
+    } else {
+      for await (const server of this.#servers) {
+        try {
+          server.connection.close();
+        } catch (error) {
+          ConsoleHelper.printMessage(
+            Tags.ERROR,
+            `closing connection to ${server.name} failed`,
+            error.message || null
+          );
+          process.exit(1);
         }
 
-        process.on('SIGINT', async () => {
+        server.stream.end(() => {
           try {
-            for await (const server of this.#servers) {
-              server.connection.close();
-
-              server.stream.end(() => {
-                try {
-                  server.stream.close();
-                } catch (error) {
-                  ConsoleHelper.printMessage(
-                    Tags.ERROR,
-                    `closing ${server.name}.json file failed`,
-                    error.message || null
-                  );
-                  process.exit(1);
-                }
-              });
-
-              server.stream.addListener('close', async () => {
-                try {
-                  await server.connection.close();
-                } catch (error) {
-                  ConsoleHelper.printMessage(
-                    Tags.ERROR,
-                    `closing connection to ${server.name} WebSocket server failed`,
-                    error.message || null
-                  );
-                  process.exit(1);
-                }
-              });
-            }
-
-            process.stdout.write('\n');
-            ConsoleHelper.printMessage(Tags.OK, `recording complete`);
-
-            // if (this.#sanitize) {
-            /**
-             * TODO
-             */
-            // }
-
-            process.exit(0);
+            server.stream.close();
           } catch (error) {
             ConsoleHelper.printMessage(
               Tags.ERROR,
               `closing ${server.name}.json file failed`,
               error.message || null
             );
-
             process.exit(1);
           }
         });
