@@ -28,7 +28,7 @@ export class ConsoleHelper {
 
   static printMessage(tag, message, error = null) {
     if (!Object.prototype.toString.call(message) === '[object String]') {
-      this.printError(Tags.ERROR, `Error message must be a string`);
+      this.printMessage(Tags.ERROR, `Error message must be a string`);
       process.exit(1);
     }
 
