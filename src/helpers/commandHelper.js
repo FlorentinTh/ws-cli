@@ -23,12 +23,6 @@ class CommandHelper {
       })
       .help('h')
       .alias('h', 'help')
-      .option('no-sanitize', {
-        describe: `Disable default sanitization of both first and last seconds of recording`,
-        type: 'boolean',
-        default: false,
-        demandOption: false
-      })
       .option('label', {
         alias: 'l',
         describe: `Label output folder according to user entry instead of a timestamp by default`,
