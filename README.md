@@ -1,5 +1,7 @@
 # ws-cli
 
+[![Snyk](https://github.com/FlorentinTh/ws-cli/actions/workflows/dependencies.yml/badge.svg)](https://github.com/FlorentinTh/ws-cli/actions/workflows/dependencies.yml) [![Build](https://github.com/FlorentinTh/ws-cli/actions/workflows/upload-assets.yml/badge.svg)](https://github.com/FlorentinTh/ws-cli/actions/workflows/upload-assets.yml) [![GitHub Release](https://img.shields.io/github/release/FlorentinTh/ws-cli)](https://github.com/FlorentinTh/ws-cli/releases) [![GitHub License](https://img.shields.io/github/license/FlorentinTh/ws-cli)](https://github.com/FlorentinTh/ws-cli/blob/master/LICENSE)
+
 Universal WS recorder app for LIARA Laboratory.
 
 ## Authors
