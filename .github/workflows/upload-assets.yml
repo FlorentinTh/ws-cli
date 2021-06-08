@@ -1,4 +1,4 @@
-name: Create and upload executables to the release assets
+name: Build
 
 on:
   release:
