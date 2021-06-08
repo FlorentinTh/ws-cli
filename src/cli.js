@@ -4,15 +4,15 @@ import FileHelper from './helpers/fileHelper';
 import CommandHelper from './helpers/commandHelper';
 import QuestionsHelper from './helpers/questionsHelper';
 import { Tags, ConsoleHelper } from './helpers/consoleHelper';
-import { WebsocketServer } from './websocketServer';
+import WebsocketServer from './websocketServer';
 
 const APP_NAME = path.basename(process.argv[1]);
 const HOME_FOLDER = require('os').homedir();
 const OUTPUT_PATH = path.join(HOME_FOLDER, APP_NAME + '_output');
 
-async function initRecordingFolder(labelOption) {
-  let label = null;
+let label = null;
 
+async function initRecordingFolder(labelOption) {
   if (labelOption) {
     label = (await QuestionsHelper.askLabelValue()).label.trim();
   }
@@ -82,7 +82,7 @@ export async function cli() {
     delay: delay,
     destination: destination,
     sanitize: CommandHelper.isOptionSet('no-sanitize'),
-    labelize: labelOption,
+    label: label,
     servers: []
   };
 

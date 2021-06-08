@@ -7,12 +7,13 @@ import WebSocketClient from 'websocket-as-promised';
 import WebSocket from 'ws';
 
 import { Tags, ConsoleHelper } from './helpers/consoleHelper';
+import Labelizer from './labelizer';
 
-export class WebsocketServer {
+class WebsocketServer {
   #delay;
   #destination;
   #sanitize;
-  #labelize;
+  #label;
   #servers;
 
   constructor(configuration) {
@@ -23,7 +24,7 @@ export class WebsocketServer {
     this.#delay = configuration.delay;
     this.#destination = configuration.destination;
     this.#sanitize = configuration.sanitize;
-    this.#labelize = configuration.labelize;
+    this.#label = configuration.label;
     this.#servers = configuration.servers;
 
     for (const server of this.#servers) {
@@ -91,6 +92,11 @@ export class WebsocketServer {
       let spinner;
       const pluralForm = this.#servers.length > 1 ? 's' : '';
 
+      let labelizer = null;
+      if (!(server.label === null)) {
+        labelizer = new Labelizer(server.name);
+      }
+
       if (!(this.#delay === null)) {
         let value = this.#delay;
 
@@ -100,7 +106,11 @@ export class WebsocketServer {
         server.connection.onMessage.addListener(async data => {
           try {
             if (value > 0) {
-              await server.stream.write(data);
+              if (!(labelizer === null)) {
+                data = labelizer.labelize(server.label, data);
+              }
+
+              await server.stream.write(data + '\n');
             }
           } catch (error) {
             ConsoleHelper.printMessage(
@@ -148,7 +158,11 @@ export class WebsocketServer {
 
         server.connection.onMessage.addListener(async data => {
           try {
-            await server.stream.write(data);
+            if (!(labelizer === null)) {
+              data = labelizer.labelize(server.label, data);
+            }
+
+            await server.stream.write(data + '\n');
           } catch (error) {
             ConsoleHelper.printMessage(
               Tags.ERROR,
@@ -226,3 +240,5 @@ export class WebsocketServer {
     }
   }
 }
+
+export default WebsocketServer;
