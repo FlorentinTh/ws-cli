@@ -81,7 +81,6 @@ export async function cli() {
   const serverConfiguration = {
     delay: delay,
     destination: destination,
-    sanitize: CommandHelper.isOptionSet('no-sanitize'),
     label: label,
     servers: []
   };
