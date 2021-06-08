@@ -13,7 +13,7 @@
     "npm:install-build": "npm install --prefix ./build --only=prod",
     "package": "pkg ./build/package.json",
     "version": "pkg-ver . dist",
-    "build": "npm-run-all clean copy compile cd:build npm:install-build package cd:root version",
+    "build": "npm-run-all start cd:build npm:install-build package cd:root version",
     "lint": "eslint ./src --ext .js,.json",
     "commit": "git-cz",
     "release": "standard-version",
