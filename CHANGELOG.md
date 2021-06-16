@@ -2,6 +2,57 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/FlorentinTh/ws-cli/compare/v1.1.4...v1.2.0) (2021-06-16)
+
+
+### Features
+
+* **labelizer:** complete labelizer ([58893e3](https://github.com/FlorentinTh/ws-cli/commit/58893e302940e73efecb41adcb8c7eb67df80559))
+* **websocketserver:** complete websocketserver code to suit recording in the lab ([0576c2a](https://github.com/FlorentinTh/ws-cli/commit/0576c2adf6b5644509a43a1f48a9dab113c4a7e7))
+
+
+### Bug Fixes
+
+* **consolehelper:** fix wrong function call: replace old printError by new printMessage ([9db9b90](https://github.com/FlorentinTh/ws-cli/commit/9db9b90ab4decb42eb10439d7626da121d860bc6))
+* **postprocessing:** remove no longer required postProcessing class ([ceac72a](https://github.com/FlorentinTh/ws-cli/commit/ceac72a53d22da85dfb098b33fd1eaf6631dc471))
+* **sanitizer&labelizer:** change liara specific checks for sanitization and labelization ([343cb2b](https://github.com/FlorentinTh/ws-cli/commit/343cb2bde5cf8d79ed523d22417aad3e07a766e8))
+
+
+### Reverts
+
+* **cli:** remove no longer required sanitize option ([6d551c6](https://github.com/FlorentinTh/ws-cli/commit/6d551c6f059f79f364132a62c6c9f5296382424c))
+* **commandhelper:** remove no longer required no-sanitize flag command ([ab4956b](https://github.com/FlorentinTh/ws-cli/commit/ab4956b5568507ee4a1c5c644730f29c6d8167e3))
+
+
+### Refactors
+
+* **websocketserver:** optimize and refactor webSocketServer according to previous changes ([e788966](https://github.com/FlorentinTh/ws-cli/commit/e7889667aa3c36fc025e066880a99f658c404efb))
+
+
+### Build System
+
+* **npm:** change build command in npm scripts ([00b8117](https://github.com/FlorentinTh/ws-cli/commit/00b8117ad9ab0d77f0aa5b60cafa2bd9f2c617ac))
+
+
+### Documentation
+
+* **readme:** add badges to README ([beeef7e](https://github.com/FlorentinTh/ws-cli/commit/beeef7e3ea09c91712f3eba8084a696754cf4f77))
+
+
+### Chore
+
+* **deps:** update dependencies ([5ffb9a9](https://github.com/FlorentinTh/ws-cli/commit/5ffb9a90935142e10d843c62344eb9ec9672ad3a))
+* **deps:** update dependencies ([fc40de1](https://github.com/FlorentinTh/ws-cli/commit/fc40de19161a56d2c74ca73f434ddedd47974ea1))
+* **gitignore:** add file to gitignore ([7625c97](https://github.com/FlorentinTh/ws-cli/commit/7625c97715a41e39d9872a3e3a95cc7f3957b0cf))
+
+
+### CI
+
+* **dependabot:** only check for production dependencies updates ([8734eac](https://github.com/FlorentinTh/ws-cli/commit/8734eac6b6fcdbac1dfdff069727bcf1b76905cc))
+* **workflows:** add github action workflow file to check dependencies vulnerabilities with Snyk ([2c42f0f](https://github.com/FlorentinTh/ws-cli/commit/2c42f0f27a3269a9ac9e7736b5466ddabda2f4da))
+* **workflows:** change name of the upload-assets workflow ([4d96c24](https://github.com/FlorentinTh/ws-cli/commit/4d96c24eafe3c1aa00bfefca542440c6c4b0e9a9))
+* **workflows:** disable trigger of workflows for dependabot alerts ([1ba350f](https://github.com/FlorentinTh/ws-cli/commit/1ba350f0efc99173f950a2a09617cf372a4faa52))
+
 ### [1.1.4](https://github.com/FlorentinTh/ws-cli/compare/v1.1.3...v1.1.4) (2021-06-03)
 
 
