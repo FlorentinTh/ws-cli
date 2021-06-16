@@ -1,4 +1,5 @@
 import { Tags, ConsoleHelper } from './helpers/consoleHelper';
+import Liara from './LIARA';
 
 class Labelizer {
   labelize(server, label, message) {
@@ -17,8 +18,10 @@ class Labelizer {
       process.exit(1);
     }
 
-    if (server === 'rfid' || server === 'energetic' || server === 'sensors') {
-      return `{"label": ${label}, "data": ${message}}`;
+    const serverUrl = `${server.host}:${server.port}`;
+
+    if (Liara.checkServer(serverUrl)) {
+      return `{"data": ${message}}`;
     }
 
     return JSON.stringify({

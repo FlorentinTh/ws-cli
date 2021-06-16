@@ -1,4 +1,5 @@
 import { Tags, ConsoleHelper } from './helpers/consoleHelper';
+import Liara from './LIARA';
 
 class Sanitizer {
   format(server, message) {
@@ -12,7 +13,9 @@ class Sanitizer {
       process.exit(1);
     }
 
-    if (server === 'rfid' || server === 'energetic' || server === 'sensors') {
+    const serverUrl = `${server.host}:${server.port}`;
+
+    if (Liara.checkServer(serverUrl)) {
       return `{"data": ${message}}`;
     }
   }
