@@ -18,6 +18,7 @@ class Sanitizer {
     if (Liara.checkServer(serverUrl)) {
       return `{"data": ${message}}`;
     }
+    return message;
   }
 }
 
