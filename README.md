@@ -30,14 +30,11 @@ Universal WS recorder app for LIARA Laboratory.
 
    - **Linux / macOS** :
      ```sh
-     $ cd $HOME
-     $ nano .bashrc
-     # add the following line to the file then save and exit :
-     export PATH=<ws-cli.exe_parent_directory_path>
-     $ source .bashrc
+     $ echo "export PATH=$PATH:<ws-cli.exe_parent_directory_path>" >> ~/.bashrc
+     $ source ~/.bashrc
      ```
 
-4. The command ```ws-cli``` should now be available from anywhere through your terminal.
+1. The command ```ws-cli``` should now be available from anywhere through your terminal.
 
 ### Manual
 
