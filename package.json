@@ -48,14 +48,14 @@
   "devDependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.14.8",
-    "@babel/eslint-parser": "^7.14.7",
-    "@babel/node": "^7.14.7",
+    "@babel/eslint-parser": "^7.14.9",
+    "@babel/node": "^7.14.9",
     "@babel/plugin-transform-regenerator": "^7.14.5",
     "@babel/plugin-transform-runtime": "^7.14.5",
-    "@babel/preset-env": "^7.14.8",
+    "@babel/preset-env": "^7.14.9",
     "cpy-cli": "^3.1.1",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^7.31.0",
+    "eslint": "^7.32.0",
     "eslint-config-node": "^4.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.3",
@@ -73,7 +73,7 @@
   "dependencies": {
     "@babel/runtime": "^7.14.8",
     "@florentinth/pkg-ver": "^1.2.1",
-    "chalk": "^4.1.1",
+    "chalk": "^4.1.2",
     "clear": "^0.1.0",
     "clui": "^0.3.6",
     "dayjs": "^1.10.6",
@@ -82,7 +82,7 @@
     "js-yaml": "^4.1.0",
     "pkg": "^5.3.1",
     "websocket-as-promised": "^2.0.1",
-    "ws": "^7.5.3",
+    "ws": "^8.0.0",
     "yargs": "^17.0.1"
   },
   "pkg": {
