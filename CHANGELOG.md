@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.3](https://github.com/FlorentinTh/ws-cli/compare/v1.2.2...v1.2.3) (2021-10-13)
+
+
+### Styling
+
+* **gh actions:** lower case name of gh actions ([3ae4f6b](https://github.com/FlorentinTh/ws-cli/commit/3ae4f6bea9d3769d885b6593b72636c41fa28f5e))
+
+
+### Chore
+
+* **deps:** update dependencies ([9075ded](https://github.com/FlorentinTh/ws-cli/commit/9075ded1f93adfc9d0be0b8c39d21ed3f6195597))
+* **deps:** update dependencies ([75b98c9](https://github.com/FlorentinTh/ws-cli/commit/75b98c9d42625e18ad509e07aef2cc3996701c57))
+* **deps:** update dependencies ([2b1af71](https://github.com/FlorentinTh/ws-cli/commit/2b1af7121d74041b17ce7968cc54fef6c621ac51))
+* **deps:** update dependencies ([1945c4d](https://github.com/FlorentinTh/ws-cli/commit/1945c4d2c5a49e94925fe2a5fc09297757bbd423))
+* **deps:** update dependencies ([bc9a0ee](https://github.com/FlorentinTh/ws-cli/commit/bc9a0ee5f0967b41c22c389f79fded39056586a5))
+
 ### [1.2.2](https://github.com/FlorentinTh/ws-cli/compare/v1.2.1...v1.2.2) (2021-09-09)
 
 
