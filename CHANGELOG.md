@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.5](https://github.com/FlorentinTh/ws-cli/compare/v1.2.4...v1.2.5) (2021-10-14)
+
+
+### CI
+
+* **build:** update build workflow file to node v14.x ([b8bc025](https://github.com/FlorentinTh/ws-cli/commit/b8bc025a53a7f9b02dbc11ab379f80d732d6dca1))
+
 ### [1.2.4](https://github.com/FlorentinTh/ws-cli/compare/v1.2.3...v1.2.4) (2021-10-14)
 
 
