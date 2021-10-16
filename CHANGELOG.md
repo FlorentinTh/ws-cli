@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.6](https://github.com/FlorentinTh/ws-cli/compare/v1.2.5...v1.2.6) (2021-10-16)
+
+
+### CI
+
+* **build:** update build file to resolve github actions error ([dbd1b94](https://github.com/FlorentinTh/ws-cli/commit/dbd1b945d554c7d3440eafc1ed4daebed0a19470))
+
 ### [1.2.5](https://github.com/FlorentinTh/ws-cli/compare/v1.2.4...v1.2.5) (2021-10-14)
 
 
