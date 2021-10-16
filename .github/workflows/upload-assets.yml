@@ -29,11 +29,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           architecture: ${{ matrix.architecture }}
 
-      - name: Update npm to v7.x
+      - name: Update npm
         run: npm i -g npm@latest --registry=https://registry.npmjs.org
 
       - name: Install project dependencies
-        run: npm ci
+        run: npm i
 
       - name: Build project
         run: npm run build
