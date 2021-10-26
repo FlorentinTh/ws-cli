@@ -80,7 +80,7 @@
     "figlet": "^1.5.2",
     "inquirer": "^8.2.0",
     "js-yaml": "^4.1.0",
-    "pkg": "^5.3.3",
+    "pkg": "^5.4.0",
     "websocket-as-promised": "^2.0.1",
     "ws": "^8.2.3",
     "yargs": "^17.2.1"
