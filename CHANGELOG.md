@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/FlorentinTh/ws-cli/compare/v1.2.6...v1.3.0) (2021-11-24)
+
+
+### Features
+
+* **websocket:** add support for webSocket endpoint ([d52c0ad](https://github.com/FlorentinTh/ws-cli/commit/d52c0ad13eaf6382fca8133699a06268a3273ec9))
+
+
+### Chore
+
+* **deps:** update dependencies ([7d015ce](https://github.com/FlorentinTh/ws-cli/commit/7d015cefd5bbd2d72001491e845694abe0d37da6))
+
 ### [1.2.6](https://github.com/FlorentinTh/ws-cli/compare/v1.2.5...v1.2.6) (2021-10-16)
 
 
