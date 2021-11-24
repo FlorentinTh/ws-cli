@@ -30,8 +30,12 @@ class WebsocketServer {
     for (const server of this.#servers) {
       const protocol = server.secured ? 'wss://' : 'ws://';
 
+      if (server.endpoint === null || server.endpoint === undefined) {
+        server.endpoint = '';
+      }
+
       server.connection = new WebSocketClient(
-        `${protocol}${server.host}:${server.port}/`,
+        `${protocol}${server.host}:${server.port}/${server.endpoint}`,
         {
           createWebSocket: url => new WebSocket(url),
           extractMessageData: event => event,
