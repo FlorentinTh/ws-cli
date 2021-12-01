@@ -83,7 +83,7 @@
     "pkg": "^5.4.1",
     "websocket-as-promised": "^2.0.1",
     "ws": "^8.3.0",
-    "yargs": "^17.2.1"
+    "yargs": "^17.3.0"
   },
   "pkg": {
     "assets": [
