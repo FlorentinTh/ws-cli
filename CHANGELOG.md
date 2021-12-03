@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/FlorentinTh/ws-cli/compare/v1.3.0...v1.3.1) (2021-12-03)
+
+
+### CI
+
+* **gh-actions:** update gh-actions scripts ([9ae4def](https://github.com/FlorentinTh/ws-cli/commit/9ae4def35fa3752340b241e74512148cd8ec82bc))
+
+
+### Refactors
+
+* **websocketserver:** change time decrease output ([4673ec2](https://github.com/FlorentinTh/ws-cli/commit/4673ec2b30dac675a2c6d1685ca6946c9e9877cb))
+
+
+### Chore
+
+* **deps:** update dependencies ([20ec01e](https://github.com/FlorentinTh/ws-cli/commit/20ec01ef09bf6863e364388401ac7aaadeaddeae))
+
 ## [1.3.0](https://github.com/FlorentinTh/ws-cli/compare/v1.2.6...v1.3.0) (2021-11-24)
 
 
