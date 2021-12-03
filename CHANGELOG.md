@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://github.com/FlorentinTh/ws-cli/compare/v1.3.1...v1.3.2) (2021-12-03)
+
+
+### Chore
+
+* **deps:** update dependencies ([59aa876](https://github.com/FlorentinTh/ws-cli/commit/59aa87677c646b23632f44419119f83b5526a5a3))
+
 ### [1.3.1](https://github.com/FlorentinTh/ws-cli/compare/v1.3.0...v1.3.1) (2021-12-03)
 
 
