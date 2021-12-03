@@ -128,7 +128,7 @@ class WebsocketServer {
 
       const interval = setInterval(async () => {
         if (value > 0) {
-          spinner.message(`writing to file${pluralForm}... ${value}s remaining`);
+          spinner.message(`writing to file${pluralForm}... Remaining (s): ${value}`);
         } else {
           spinner.stop();
           this.#close(interval);
