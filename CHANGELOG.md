@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.3](https://github.com/FlorentinTh/ws-cli/compare/v1.3.2...v1.3.3) (2021-12-06)
+
+
+### CI
+
+* **gh-actions:** add a separate build action from upload assets action which is now a dedicated task ([6859f3e](https://github.com/FlorentinTh/ws-cli/commit/6859f3e5d2cc24520dfd5ce6854e3d9619e72368))
+* **readme:** change build badge URL ([e4b052f](https://github.com/FlorentinTh/ws-cli/commit/e4b052f44d9af01bb96602f06a11196fbbee4dc3))
+
+
+### Refactors
+
+* **gh-actions:** rename build action ([4e639ed](https://github.com/FlorentinTh/ws-cli/commit/4e639eddf3d9aa0e1110db92a8173aed956b96f8))
+* **gh-actions:** rename upload-assets action ([655b6af](https://github.com/FlorentinTh/ws-cli/commit/655b6af4d6758f05a65da31e0f2a9016927a21e3))
+* **readme:** update badge links ([22af3a0](https://github.com/FlorentinTh/ws-cli/commit/22af3a0ace1f70ac87a3b0696f55e1ec68e31987))
+
+
+### Chore
+
+* **deps:** update dependencies ([83c0d9a](https://github.com/FlorentinTh/ws-cli/commit/83c0d9a7c26bfbb441dc3edede63dce4008cc63f))
+
 ### [1.3.2](https://github.com/FlorentinTh/ws-cli/compare/v1.3.1...v1.3.2) (2021-12-03)
 
 
