@@ -1,4 +1,4 @@
-name: build
+name: upload-assets
 
 on:
   release:
