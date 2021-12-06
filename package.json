@@ -8,7 +8,7 @@
     "compile": "babel src --out-dir build/src",
     "start": "npm-run-all clean copy compile",
     "link": "cd build && npm link",
-    "package": "pkg ./build/package.json",
+    "package": "pkg .",
     "version": "pkg-ver . dist",
     "lint": "eslint ./src --ext .js,.json",
     "commit": "git-cz",
@@ -83,13 +83,13 @@
   },
   "pkg": {
     "assets": [
-      "node_modules/figlet/fonts/*"
+      "./node_modules/figlet/fonts/Standard.flf"
     ],
     "targets": [
       "node14-linux-x64",
       "node14-macos-x64",
       "node14-win-x64"
     ],
-    "outputPath": "dist"
+    "outputPath": "../dist"
   }
 }

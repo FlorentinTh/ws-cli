@@ -38,17 +38,11 @@ jobs:
       - name: Build project
         run: npm run start
 
-      - name: Move to build directory
-        run: cd ./build
-
-      - name: Install production dependencies
-        run: npm install --only=prod
-
-      - name: Move to root folder
-        run: cd ../
-
       - name: Package executables
-        run: npm run package
+        run: |
+          cd ./build
+          npm install --only=prod
+          npm run package
 
       - name: Version executables
         run: npm run version
