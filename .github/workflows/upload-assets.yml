@@ -40,12 +40,13 @@ jobs:
 
       - name: Package executables
         run: |
+          pwd
           cd ./build
+          pwd
           npm install --only=prod
           npm run package
-
-      - name: Version executables
-        run: npm run version
+          cd ../
+          npm run version
 
       - name: Upload executables to latest release assets
         uses: shogo82148/actions-upload-release-asset@v1
