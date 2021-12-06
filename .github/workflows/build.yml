@@ -1,9 +1,9 @@
-name: build
+name: snyk
 
 on:
-  release:
-    types:
-      - created
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -12,8 +12,11 @@ jobs:
       matrix:
         os:
           - windows-latest
+          - ubuntu-latest
+          - macos-latest
         node-version:
           - 14
+          - 16
         architecture:
           - x64
 
@@ -37,21 +40,3 @@ jobs:
 
       - name: Build project
         run: npm run start
-
-      - name: Move to build directory
-        run: cd ./build
-
-      - name: Package executables
-        run: npm run package
-
-      - name: Move to root folder
-        run: cd ../
-
-      - name: Version executables
-        run: npm run version
-
-      - name: Upload executables to latest release assets
-        uses: shogo82148/actions-upload-release-asset@v1
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: dist/*
