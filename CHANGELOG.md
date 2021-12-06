@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.4](https://github.com/FlorentinTh/ws-cli/compare/v1.3.3...v1.3.4) (2021-12-06)
+
+
+### CI
+
+* **gh-actions:** update upload-assests workflow ([2364700](https://github.com/FlorentinTh/ws-cli/commit/2364700189a8af8e3c448f71a4ab98e94b1d2d32))
+
 ### [1.3.3](https://github.com/FlorentinTh/ws-cli/compare/v1.3.2...v1.3.3) (2021-12-06)
 
 
