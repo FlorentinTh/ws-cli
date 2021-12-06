@@ -40,9 +40,8 @@ jobs:
 
       - name: Package executables
         run: |
-          pwd
+          npm run clean:node
           cd ./build
-          pwd
           npm install --only=prod
           npm run package
           cd ../
