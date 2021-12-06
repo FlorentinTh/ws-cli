@@ -4,7 +4,6 @@
   "description": "Universal WS recorder app for LIARA Laboratory",
   "scripts": {
     "clean": "rimraf build dist",
-    "clean:node": "rimraf node_modules",
     "copy": "cpy package.json bin build --parents",
     "compile": "babel src --out-dir build/src",
     "start": "npm-run-all clean copy compile",

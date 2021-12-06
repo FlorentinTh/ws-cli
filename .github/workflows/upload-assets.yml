@@ -40,9 +40,8 @@ jobs:
 
       - name: Package executables
         run: |
-          npm run clean:node
           cd ./build
-          npm install --only=prod
+          npm install --only=prod --force
           npm run package
           cd ../
           npm run version
