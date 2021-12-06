@@ -44,11 +44,11 @@ jobs:
       - name: Install production dependencies
         run: npm install --only=prod
 
-      - name: Package executables
-        run: npm run package
-
       - name: Move to root folder
         run: cd ../
+
+      - name: Package executables
+        run: npm run package
 
       - name: Version executables
         run: npm run version
