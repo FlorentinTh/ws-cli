@@ -41,6 +41,9 @@ jobs:
       - name: Move to build directory
         run: cd ./build
 
+      - name: Install production dependencies
+        run: npm install --only=prod
+
       - name: Package executables
         run: npm run package
 

@@ -10,7 +10,6 @@
     "link": "cd build && npm link",
     "package": "pkg ./build/package.json",
     "version": "pkg-ver . dist",
-    "build": "npm install --prefix ./build --only=prod",
     "lint": "eslint ./src --ext .js,.json",
     "commit": "git-cz",
     "release": "standard-version",
