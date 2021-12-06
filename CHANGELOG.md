@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.6](https://github.com/FlorentinTh/ws-cli/compare/v1.3.5...v1.3.6) (2021-12-06)
+
+
+### Bug Fixes
+
+* **consolehelper:** ensure figlet is using Standard font ([c800a14](https://github.com/FlorentinTh/ws-cli/commit/c800a14770344df7efc57fa29e0945ad93e311f8))
+
+
+### CI
+
+* **gh-actions:** try to fix upload-assets workflow ([d83301c](https://github.com/FlorentinTh/ws-cli/commit/d83301ce68a20c0725adb039331477ec5246ec52))
+
 ### [1.3.5](https://github.com/FlorentinTh/ws-cli/compare/v1.3.4...v1.3.5) (2021-12-06)
 
 
