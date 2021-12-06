@@ -15,7 +15,11 @@ export class ConsoleHelper {
   }
 
   static printAppTitle(title) {
-    console.log(chalk.white(figlet.textSync(title, { horizontalLayout: 'fitted' })));
+    console.log(
+      chalk.white(
+        figlet.textSync(title, { horizontalLayout: 'fitted', font: 'Standard' })
+      )
+    );
   }
 
   static printAppDescription() {
