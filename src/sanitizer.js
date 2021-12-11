@@ -3,12 +3,12 @@ import Liara from './LIARA';
 
 class Sanitizer {
   format(server, message) {
-    if (!Object.prototype.toString.call(server) === '[object String]') {
+    if (!(Object.prototype.toString.call(server) === '[object String]')) {
       ConsoleHelper.printMessage(Tags.ERROR, `server parameter must be a string`);
       process.exit(1);
     }
 
-    if (!Object.prototype.toString.call(message) === '[object String]') {
+    if (!(Object.prototype.toString.call(message) === '[object String]')) {
       ConsoleHelper.printMessage(Tags.ERROR, `message parameter must be a string`);
       process.exit(1);
     }

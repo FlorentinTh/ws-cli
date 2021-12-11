@@ -47,7 +47,7 @@ class FileHelper {
   }
 
   static async isConfigurationFileExists(filePath) {
-    if (!Object.prototype.toString.call(filePath) === '[object String]') {
+    if (!(Object.prototype.toString.call(filePath) === '[object String]')) {
       ConsoleHelper.printMessage(
         Tags.ERROR,
         `Configuration file path argument must be a string`
@@ -67,7 +67,7 @@ class FileHelper {
 
   static async getServerList(filePath) {
     try {
-      const serverListFile = await fs.promises.readFile(filePath, 'utf-8');
+      const serverListFile = await fs.promises.readFile(filePath, 'utf8');
       return yaml.load(serverListFile);
     } catch (error) {
       ConsoleHelper.printMessage(

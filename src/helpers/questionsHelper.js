@@ -34,7 +34,7 @@ class QuestionsHelper {
         name: 'value',
         message: 'How long does the recording should last in seconds?',
         validate: input => {
-          if (isNaN(input) || input <= 0) {
+          if (Number.isNaN(input) || input <= 0) {
             return 'Please enter a valid number greater than 0';
           }
 
@@ -53,7 +53,7 @@ class QuestionsHelper {
         name: 'label',
         message: 'Enter a label : ',
         validate: input => {
-          if (!Object.prototype.toString.call(input) === '[object String]') {
+          if (!(Object.prototype.toString.call(input) === '[object String]')) {
             return 'Please enter a valid string input';
           }
 

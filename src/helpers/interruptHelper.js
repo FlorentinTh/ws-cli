@@ -7,6 +7,7 @@ class InterruptHelper {
       });
 
       rl.on('SIGINT', () => {
+        rl.close();
         process.emit('SIGINT');
       });
     }
