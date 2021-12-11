@@ -100,6 +100,7 @@ class WebsocketServer {
 
     if (!(this.#delay === null)) {
       let value = this.#delay;
+      const delayDigits = this.#delay.toString().length;
 
       spinner = new Spinner(`writing to file${pluralForm}...`);
       spinner.start();
@@ -128,12 +129,37 @@ class WebsocketServer {
 
       const interval = setInterval(async () => {
         if (value > 0) {
-          spinner.message(`writing to file${pluralForm}... Remaining (s): ${value}`);
+          const digits = value.toString().length;
+
+          if (digits === delayDigits) {
+            spinner.message(`writing to file${pluralForm}... ${value}s remaining`);
+          } else if (digits < delayDigits) {
+            let spaces = '';
+
+            for (let i = 0; i < delayDigits - digits; ++i) {
+              spaces = spaces + ' ';
+            }
+
+            spinner.message(
+              `writing to file${pluralForm}... ${spaces}${value}s remaining`
+            );
+          } else {
+            spinner.stop();
+
+            ConsoleHelper.printMessage(
+              Tags.ERROR,
+              `an unexpected error occurs with recording delay`,
+              null
+            );
+
+            process.exit(1);
+          }
         } else {
           spinner.stop();
           this.#close(interval);
 
           ConsoleHelper.printMessage(Tags.OK, `recording complete`);
+
           process.exit(0);
         }
 
