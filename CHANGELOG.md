@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.11](https://github.com/FlorentinTh/ws-cli/compare/v1.3.10...v1.3.11) (2021-12-11)
+
+
+### Refactors
+
+* **project:** refactor all project to improve code quality ([bd8545d](https://github.com/FlorentinTh/ws-cli/commit/bd8545dee7cabbc1f31780f8ffbda434103a6504))
+
 ### [1.3.10](https://github.com/FlorentinTh/ws-cli/compare/v1.3.9...v1.3.10) (2021-12-11)
 
 
