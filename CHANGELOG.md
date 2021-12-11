@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.10](https://github.com/FlorentinTh/ws-cli/compare/v1.3.9...v1.3.10) (2021-12-11)
+
+
+### Bug Fixes
+
+* **websocketserver:** fix a minor bug in the spinner time decrease display ([0d494d0](https://github.com/FlorentinTh/ws-cli/commit/0d494d0becbc57af86f9167fa2da9a6be894c85a))
+
+
+### Chore
+
+* **deps:** update dependencies ([8ee0267](https://github.com/FlorentinTh/ws-cli/commit/8ee026704835656eb27163baf311687fbefa04cb))
+
 ### [1.3.9](https://github.com/FlorentinTh/ws-cli/compare/v1.3.8...v1.3.9) (2021-12-06)
 
 
