@@ -110,9 +110,9 @@ class WebsocketServer {
           try {
             if (value > 0) {
               if (!(this.#label === null)) {
-                data = labelizer.labelize(server, this.#label, data);
+                data = labelizer.labelize(server, this.#label, data.toString());
               } else {
-                data = sanitizer.format(server, data);
+                data = sanitizer.format(server, data.toString());
               }
 
               await server.stream.write(data + '\n');
@@ -173,9 +173,9 @@ class WebsocketServer {
         server.connection.onMessage.addListener(async data => {
           try {
             if (!(this.#label === null)) {
-              data = labelizer.labelize(server, this.#label, data);
+              data = labelizer.labelize(server, this.#label, data.toString());
             } else {
-              data = sanitizer.format(server, data);
+              data = sanitizer.format(server, data.toString());
             }
 
             await server.stream.write(data + '\n');
