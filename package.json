@@ -1,6 +1,6 @@
 {
   "name": "ws-cli",
-  "version": "1.3.11",
+  "version": "1.3.12",
   "description": "Universal WS recorder app for LIARA Laboratory",
   "scripts": {
     "clean": "rimraf build dist",

@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.12](https://github.com/FlorentinTh/ws-cli/compare/v1.3.11...v1.3.12) (2021-12-14)
+
+
+### Bug Fixes
+
+* **cli:** fix several type checking errors that prevent the cli to works properly ([ad81d78](https://github.com/FlorentinTh/ws-cli/commit/ad81d78c1e99a4ade48ceb4544715a736c9539de))
+
+
+### Styling
+
+* **sanitizer:** fix trailing white-space ([c7df84c](https://github.com/FlorentinTh/ws-cli/commit/c7df84ccd78b4553d11828cb7bac9b18d3194dee))
+
+
+### Chore
+
+* **deps:** update dependencies ([2d4098e](https://github.com/FlorentinTh/ws-cli/commit/2d4098e7f8b3dce9eb586acddc77b30186e0999b))
+
 ### [1.3.11](https://github.com/FlorentinTh/ws-cli/compare/v1.3.10...v1.3.11) (2021-12-11)
 
 
