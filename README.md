@@ -1,8 +1,8 @@
 # ws-cli
 
-[![snyk](https://github.com/FlorentinTh/ws-cli/actions/workflows/dependencies.yml/badge.svg)](https://github.com/FlorentinTh/ws-cli/actions/workflows/dependencies.yml) [![build](https://github.com/FlorentinTh/ws-cli/actions/workflows/build.yml/badge.svg)](https://github.com/FlorentinTh/ws-cli/actions/workflows/build.yml) [![GitHub Release](https://img.shields.io/github/release/FlorentinTh/ws-cli)](https://github.com/FlorentinTh/ws-cli/releases) [![GitHub License](https://img.shields.io/github/license/FlorentinTh/ws-cli)](https://github.com/FlorentinTh/ws-cli/blob/master/LICENSE)
+![platform](https://img.shields.io/badge/platform-linux--64%20%7C%20win--32%20%7C%20osx--64%20%7C%20win--64%20-lightgrey) ![node](https://img.shields.io/badge/node-%3E%3D16-blue) [![License](https://img.shields.io/github/license/FlorentinTh/ws-cli)](https://github.com/FlorentinTh/ws-cli/blob/master/LICENSE) [![snyk](https://github.com/FlorentinTh/ws-cli/actions/workflows/dependencies.yml/badge.svg)](https://github.com/FlorentinTh/ws-cli/actions/workflows/dependencies.yml) [![build](https://github.com/FlorentinTh/ws-cli/actions/workflows/build.yml/badge.svg)](https://github.com/FlorentinTh/ws-cli/actions/workflows/build.yml) [![GitHub Release](https://img.shields.io/github/release/FlorentinTh/ws-cli)](https://github.com/FlorentinTh/ws-cli/releases)
 
-Universal WS recorder app for LIARA Laboratory.
+This CLI allows you to record data from a provided list of WebSocket servers.
 
 ## Authors
 
@@ -12,63 +12,91 @@ Universal WS recorder app for LIARA Laboratory.
 
 ### Simple
 
-1. Download the [latest release](https://github.com/FlorentinTh/ws-cli/releases) of the executable for your platform and rename it as ```ws-cli```.
+1. [Install or update node](https://nodejs.org/dist/latest-v16.x/) to 16 or greater if not already done.
 
-2. Copy the executable and paste it somewhere safe. For example on windows it can be : ```C:/dev/ws-cli-[release_version]/ws-cli.exe```.
+2. Install the project :
 
-3. Add the path to you environment variable :
-
-> **Note**: replace ```<ws-cli.exe_parent_directory_path>``` by your actual path. Such as ```C:/dev/ws-cli-v1.x/```
-
-   - **Windows** :
-     - with PowerShell :
-     ```sh
-     $ setx PATH "%PATH%;<ws-cli.exe_parent_directory_path>"
-     ```
-
-     _your powershell session need to be restarted._
-
-   - **Linux / macOS** :
-     ```sh
-     $ echo "export PATH=$PATH:<ws-cli.exe_parent_directory_path>" >> ~/.bashrc
-     $ source ~/.bashrc
-     ```
-
-1. The command ```ws-cli``` should now be available from anywhere through your terminal.
+```sh
+$ npm install -g ws-cli
+```
 
 ### Manual
 
-1. [Install or update node](https://nodejs.org/dist/latest-v12.x/) to 12.x or greater if not already done.
+1. [Install or update node](https://nodejs.org/dist/latest-v16.x/) to 16 or greater if not already done.
 
-2. Clone this repo :
+2. Clone this repo:
 ```sh
 $ git clone https://github.com/FlorentinTh/ws-cli.git
 
+# or
+
+$ git clone git@github.com:FlorentinTh/ws-cli.git
+
+# or
+
+$ gh repo clone FlorentinTh/ws-cli
+
 ```
 
-2. Build the project :
+2. Install the project:
 
 ```sh
-$ npm run build
+$ cd ws-cli/
+$ npm i
 ```
 
-3. Once completed, in the root project directory you should have a new folder called ```dist``` containing three executables. Rename the executable corresponding to your platform as ```ws-cli``` and follow the same instructions as for the [simple installation process](#simple) beginning at step 2.
+3. Run the program locally:
+
+```sh
+$ node ./bin/ws-cli.js
+
+# or
+
+$ npm run start
+```
+4. Run the program globally:
+
+```sh
+$ npm run link
+```
+_You should now have access to the ```ws-cli``` command from anywhere in your favorite terminal appication._
 
 ## Usage
 ```
-Usage: ws-cli [OPTIONS]
+Usage:
+  $ ws-cli [options]
 
 Options:
-  -c, --configuration  Path of the YAML configuration file containing the list
-                       of the WebSocket servers [string] [default: "servers.yml"]
-  -d, --default        Automatically respond to questions with default values
-                                                      [boolean] [default: false]
-      --help           Show help                                       [boolean]
-      --no-sanitize    Disable default sanitization of both first and last
-                       seconds of recording           [boolean] [default: false]
-  -l, --label          Label output folder according to user entry instead of a
-                       timestamp by default           [boolean] [default: false]
-      --version        Show version number                             [boolean]
+  -c, -C, --conf     Path of the YAML configuration file containing the list of
+                     the WebSocket servers   [string] [default: "./servers.yml"]
+
+  -h, -H, --help     Show help                                         [boolean]
+
+  -l, -L, --label    Label output folder according to the user entry instead of
+                     a timestamp by default and add the provided label to the
+                     data                             [boolean] [default: false]
+
+  -v, -V, --version  Show version number                               [boolean]
+```
+
+## Example of YAML Configuration File
+
+```yml
+- name: 'WebSocket Server 1'
+  host: 127.0.0.1
+  port: 5001
+  secured: false
+
+- name: 'WebSocket Server 2'
+  host: 127.0.0.1
+  port: 5002
+  secured: true
+
+- name: 'WebSocket Server 3'
+  host: 127.0.0.1
+  port: 5003
+  endpoint: 'data'
+  secured: false
 ```
 
 ## License

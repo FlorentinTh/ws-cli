@@ -1,15 +1,15 @@
 import fs from 'fs';
 import path from 'path';
-
-import { Spinner } from 'clui';
-import chalk from 'chalk';
+import clui from 'clui';
 import WebSocketClient from 'websocket-as-promised';
 import WebSocket from 'ws';
+import { Buffer } from 'buffer';
 
-import { Tags, ConsoleHelper } from './helpers/consoleHelper';
-import InterruptHelper from './helpers/interruptHelper';
-import Labelizer from './labelizer';
-import Sanitizer from './sanitizer';
+import { Tags, ConsoleHelper } from './helpers/consoleHelper.js';
+import InterruptHelper from './helpers/interruptHelper.js';
+import Labeler from './labeler.js';
+import Sanitizer from './sanitizer.js';
+import TypeHelper from './helpers/typeHelper.js';
 
 class WebsocketServer {
   #delay;
@@ -17,17 +17,56 @@ class WebsocketServer {
   #label;
   #servers;
 
+  get delay() {
+    return this.#delay;
+  }
+
+  get destination() {
+    return this.#destination;
+  }
+
+  get label() {
+    return this.#label;
+  }
+
+  get servers() {
+    return this.#servers;
+  }
+
+  set delay(delay) {
+    this.#delay = delay;
+  }
+
+  set destination(destination) {
+    this.#destination = destination;
+  }
+
+  set label(label) {
+    this.#label = label;
+  }
+
+  set servers(servers) {
+    this.#servers = servers;
+  }
+
   constructor(configuration) {
-    if (!(configuration instanceof Object) && !(configuration === null)) {
-      throw new Error('configuration must be a not null Object');
+    if (
+      !TypeHelper.isObject(configuration) &&
+      !TypeHelper.isUndefinedOrNull(configuration)
+    ) {
+      ConsoleHelper.printMessage(
+        Tags.ERROR,
+        `Server configuration must be a not null Object. Received: ${configuration}`
+      );
+      process.exit(1);
     }
 
-    this.#delay = configuration.delay;
-    this.#destination = configuration.destination;
-    this.#label = configuration.label;
-    this.#servers = configuration.servers;
+    this.delay = configuration.delay;
+    this.destination = configuration.destination;
+    this.label = configuration.label;
+    this.servers = configuration.servers;
 
-    for (const server of this.#servers) {
+    for (const server of this.servers) {
       const protocol = server.secured ? 'wss://' : 'ws://';
 
       if (server.endpoint === null || server.endpoint === undefined) {
@@ -47,8 +86,8 @@ class WebsocketServer {
   }
 
   async connect() {
-    for (const server of this.#servers) {
-      const spinner = new Spinner(
+    for (const server of this.servers) {
+      const spinner = new clui.Spinner(
         `opening connection on ${server.name} WebSocket server... `
       );
 
@@ -56,17 +95,14 @@ class WebsocketServer {
 
       try {
         await server.connection.open();
-        console.log(
-          chalk.grey(`connection to ${server.name} WebSocket server`),
-          chalk.grey('['),
-          chalk.green('OK'),
-          chalk.grey(']')
-        );
+        ConsoleHelper.printServerConnection(server.name);
       } catch (error) {
         ConsoleHelper.printMessage(
           Tags.ERROR,
           `impossible to open connection on ${server.name} WebSocket server`,
-          error.message || null
+          {
+            error: error.message || null
+          }
         );
         process.exit(1);
       }
@@ -77,13 +113,15 @@ class WebsocketServer {
 
       try {
         server.stream = fs.createWriteStream(
-          path.join(this.#destination, `${filename}.json`)
+          path.join(this.destination, `${filename}.json`)
         );
       } catch (error) {
         ConsoleHelper.printMessage(
           Tags.ERROR,
           `creating ${server.name}.json file failed`,
-          error.message || null
+          {
+            error: error.message || null
+          }
         );
         process.exit(1);
       }
@@ -92,27 +130,27 @@ class WebsocketServer {
   }
 
   async #write() {
-    const labelizer = new Labelizer();
+    const labeler = new Labeler();
     const sanitizer = new Sanitizer();
 
     let spinner;
-    const pluralForm = this.#servers.length > 1 ? 's' : '';
+    const pluralForm = this.servers.length > 1 ? 's' : '';
 
-    if (!(this.#delay === null)) {
-      let value = this.#delay;
-      const delayDigits = this.#delay.toString().length;
+    if (!(this.delay === null)) {
+      let value = this.delay;
+      const delayDigits = this.delay.toString().length;
 
-      spinner = new Spinner(`writing to file${pluralForm}...`);
+      spinner = new clui.Spinner(`writing to file${pluralForm}...`);
       spinner.start();
 
-      for (const server of this.#servers) {
+      for (const server of this.servers) {
         server.connection.onMessage.addListener(async data => {
           try {
             if (value > 0) {
-              if (!(this.#label === null)) {
-                data = labelizer.labelize(server, this.#label, data);
-              } else {
-                data = sanitizer.format(server, data);
+              data = sanitizer.format(server, Buffer.from(data).toString());
+
+              if (!(this.label === null)) {
+                data = labeler.label(server, this.label, Buffer.from(data).toString());
               }
 
               await server.stream.write(data + '\n');
@@ -121,7 +159,9 @@ class WebsocketServer {
             ConsoleHelper.printMessage(
               Tags.ERROR,
               `writing to ${server.name}.json file failed`,
-              error.message || null
+              {
+                error: error.message || null
+              }
             );
           }
         });
@@ -166,16 +206,16 @@ class WebsocketServer {
         value--;
       }, 1000);
     } else {
-      spinner = new Spinner(`writing to file${pluralForm}... (Ctrl+C to stop)`);
+      spinner = new clui.Spinner(`writing to file${pluralForm}... (Ctrl+C to stop)`);
       spinner.start();
 
-      for (const server of this.#servers) {
+      for (const server of this.servers) {
         server.connection.onMessage.addListener(async data => {
           try {
-            if (!(this.#label === null)) {
-              data = labelizer.labelize(server, this.#label, data);
-            } else {
-              data = sanitizer.format(server, data);
+            data = sanitizer.format(server, Buffer.from(data).toString());
+
+            if (!(this.label === null)) {
+              data = labeler.label(server, this.label, Buffer.from(data).toString());
             }
 
             await server.stream.write(data + '\n');
@@ -183,7 +223,9 @@ class WebsocketServer {
             ConsoleHelper.printMessage(
               Tags.ERROR,
               `writing to ${server.name}.json file failed`,
-              error.message || null
+              {
+                error: error.message || null
+              }
             );
             process.exit(1);
           }
@@ -207,7 +249,7 @@ class WebsocketServer {
     if (!(intervalId === null)) {
       clearInterval(intervalId);
 
-      for (const server of this.#servers) {
+      for (const server of this.servers) {
         try {
           await server.stream.close();
           await server.connection.close();
@@ -215,20 +257,24 @@ class WebsocketServer {
           ConsoleHelper.printMessage(
             Tags.ERROR,
             `closing ${server.name}.json file failed`,
-            error.message || null
+            {
+              error: error.message || null
+            }
           );
           process.exit(1);
         }
       }
     } else {
-      for await (const server of this.#servers) {
+      for await (const server of this.servers) {
         try {
           server.connection.close();
         } catch (error) {
           ConsoleHelper.printMessage(
             Tags.ERROR,
             `closing connection to ${server.name} failed`,
-            error.message || null
+            {
+              error: error.message || null
+            }
           );
           process.exit(1);
         }
@@ -240,7 +286,9 @@ class WebsocketServer {
             ConsoleHelper.printMessage(
               Tags.ERROR,
               `closing ${server.name}.json file failed`,
-              error.message || null
+              {
+                error: error.message || null
+              }
             );
             process.exit(1);
           }

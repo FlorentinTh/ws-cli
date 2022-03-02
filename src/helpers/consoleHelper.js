@@ -2,6 +2,8 @@ import clear from 'clear';
 import chalk from 'chalk';
 import figlet from 'figlet';
 
+import TypeHelper from './typeHelper.js';
+
 export const Tags = {
   INFO: 'INFO',
   ERROR: 'ERROR',
@@ -15,6 +17,11 @@ export class ConsoleHelper {
   }
 
   static printAppTitle(title) {
+    if (!TypeHelper.isString(title)) {
+      this(Tags.ERROR, `title must be a string`);
+      process.exit(1);
+    }
+
     console.log(
       chalk.white(
         figlet.textSync(title, { horizontalLayout: 'fitted', font: 'Standard' })
@@ -22,24 +29,46 @@ export class ConsoleHelper {
     );
   }
 
-  static printAppDescription() {
+  static printAppDescription(description) {
+    if (!TypeHelper.isString(description)) {
+      this(Tags.ERROR, `description must be a string`);
+      process.exit(1);
+    }
+
+    console.log(chalk.white(`\n${description}\n`));
+  }
+
+  static printServerConnection(serverName) {
+    if (!TypeHelper.isString(serverName)) {
+      this(Tags.ERROR, `serverName must be a string`);
+      process.exit(1);
+    }
+
     console.log(
-      chalk.white(
-        `\nThis CLI allows you to record data from every WebSocket available in the LIARA laboratory.\n`
-      )
+      chalk.grey(`connection to ${serverName} WebSocket server`),
+      chalk.grey('['),
+      chalk.green('OK'),
+      chalk.grey(']')
     );
   }
 
-  static printMessage(tag, message, error = null) {
-    if (!(Object.prototype.toString.call(message) === '[object String]')) {
-      this(Tags.ERROR, `Error message must be a string`);
+  static printMessage(tag, message, options = { error: null, eol: true }) {
+    const defaultOptions = { error: null, eol: true };
+
+    options = {
+      ...defaultOptions,
+      ...options
+    };
+
+    if (!TypeHelper.isString(message)) {
+      this(Tags.ERROR, `message must be a string`);
       process.exit(1);
     }
 
     let errorMsg = '';
 
-    if (!(error === null)) {
-      errorMsg = `Reason: ${error}`;
+    if (!TypeHelper.isUndefinedOrNull(options.error)) {
+      errorMsg = `Reason: ${options.error}`;
     }
 
     switch (tag) {
@@ -56,14 +85,19 @@ export class ConsoleHelper {
         tag = chalk.yellowBright(tag);
         break;
       default:
+        tag = chalk.cyan(Tags.INFO);
         break;
     }
 
-    console.log(
-      chalk.grey('\n['),
-      tag,
-      chalk.grey(']'),
+    let output = options.eol ? '\n' : '';
+
+    output += `${
+      chalk.grey('[ ') +
+      tag +
+      chalk.grey(' ]') +
       chalk.white(`: ${message}. ${errorMsg}\n`)
-    );
+    }`;
+
+    console.log(output);
   }
 }

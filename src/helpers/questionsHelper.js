@@ -1,4 +1,5 @@
 import inquirer from 'inquirer';
+import TypeHelper from './typeHelper.js';
 
 class QuestionsHelper {
   static async askEnableDelay() {
@@ -34,7 +35,7 @@ class QuestionsHelper {
         name: 'value',
         message: 'How long does the recording should last in seconds?',
         validate: input => {
-          if (Number.isNaN(input) || input <= 0) {
+          if (Number.isFinite(input) || input <= 0) {
             return 'Please enter a valid number greater than 0';
           }
 
@@ -53,7 +54,7 @@ class QuestionsHelper {
         name: 'label',
         message: 'Enter a label : ',
         validate: input => {
-          if (!(Object.prototype.toString.call(input) === '[object String]')) {
+          if (!TypeHelper.isString(input)) {
             return 'Please enter a valid string input';
           }
 

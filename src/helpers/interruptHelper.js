@@ -1,13 +1,15 @@
+import readline from 'readline';
+
 class InterruptHelper {
   static initWindowsInterrupt() {
     if (process.platform === 'win32') {
-      const rl = require('readline').createInterface({
+      const readLine = readline.createInterface({
         input: process.stdin,
         output: process.stdout
       });
 
-      rl.on('SIGINT', () => {
-        rl.close();
+      readLine.on('SIGINT', () => {
+        readLine.close();
         process.emit('SIGINT');
       });
     }

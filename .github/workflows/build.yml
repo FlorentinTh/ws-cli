@@ -15,7 +15,6 @@ jobs:
           - ubuntu-latest
           - macos-latest
         node-version:
-          - 14
           - 16
         architecture:
           - x64
@@ -32,11 +31,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           architecture: ${{ matrix.architecture }}
 
-      - name: Update npm
-        run: npm i -g npm@latest --registry=https://registry.npmjs.org
-
       - name: Install project dependencies
         run: npm ci
 
       - name: Build project
-        run: npm run start
+        run: npm run test

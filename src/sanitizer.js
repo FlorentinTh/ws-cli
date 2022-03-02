@@ -1,23 +1,33 @@
-import { Tags, ConsoleHelper } from './helpers/consoleHelper';
-import Liara from './LIARA';
+import { Tags, ConsoleHelper } from './helpers/consoleHelper.js';
+import TypeHelper from './helpers/typeHelper.js';
 
 class Sanitizer {
   format(server, message) {
-    if (!(Object.prototype.toString.call(server) === '[object String]')) {
+    if (!TypeHelper.isString(server.name)) {
       ConsoleHelper.printMessage(Tags.ERROR, `server parameter must be a string`);
       process.exit(1);
     }
 
-    if (!(Object.prototype.toString.call(message) === '[object String]')) {
+    if (!TypeHelper.isString(message)) {
       ConsoleHelper.printMessage(Tags.ERROR, `message parameter must be a string`);
       process.exit(1);
     }
 
-    const serverUrl = `${server.host}:${server.port}`;
+    const json = JSON.parse(message);
+    if (TypeHelper.isArray(json)) {
 
-    if (Liara.checkServer(serverUrl)) {
-      return `{"data": ${message}}`;
+      let output = '';
+      for (let i = 0; i < json.length; ++i) {
+        if (i > 0) {
+          output += `\n${JSON.stringify(json[i])}`;
+        } else {
+          output += JSON.stringify(json[i]);
+        }
+      }
+
+      return output;
     }
+
     return message;
   }
 }
