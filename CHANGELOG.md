@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/FlorentinTh/ws-cli/compare/v1.3.11...v2.0.0) (2022-03-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* **project:** Modern JS code and Sanitizer component is now default and generic
+
+### Refactors
+
+* **project:** huge refactor to use node modules ([9853158](https://github.com/FlorentinTh/ws-cli/commit/9853158ec35d4716629cac84a56f7cba0a41020d))
+
+
+### Styling
+
+* **sanitizer:** fix space issue ([4a27962](https://github.com/FlorentinTh/ws-cli/commit/4a2796283ef796a235267381055643c07f3f0404))
+
 ### [1.3.11](https://github.com/FlorentinTh/ws-cli/compare/v1.3.10...v1.3.11) (2021-12-11)
 
 
