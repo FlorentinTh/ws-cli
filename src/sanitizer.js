@@ -15,8 +15,8 @@ class Sanitizer {
 
     const json = JSON.parse(message);
     if (TypeHelper.isArray(json)) {
-
       let output = '';
+
       for (let i = 0; i < json.length; ++i) {
         if (i > 0) {
           output += `\n${JSON.stringify(json[i])}`;
