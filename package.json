@@ -1,5 +1,5 @@
 {
-  "name": "ws-cli",
+  "name": "@florentinth/ws-cli",
   "version": "2.0.0",
   "description": "This CLI allows you to record data from a provided list of WebSocket servers",
   "type": "module",

@@ -17,7 +17,7 @@ This CLI allows you to record data from a provided list of WebSocket servers.
 2. Install the project :
 
 ```sh
-$ npm install -g ws-cli
+$ npm install -g @florentinth/ws-cli
 ```
 
 ### Manual
