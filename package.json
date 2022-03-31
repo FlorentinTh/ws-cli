@@ -40,7 +40,7 @@
   ],
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.11.0",
+    "eslint": "^8.12.0",
     "eslint-config-node": "^4.1.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^17.0.0-1",
@@ -49,21 +49,21 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^6.0.0",
     "pre-commit": "^1.2.2",
-    "prettier": "^2.6.0",
+    "prettier": "^2.6.1",
     "standard-version": "^9.3.2"
   },
   "dependencies": {
-    "ajv": "^8.10.0",
+    "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
     "chalk": "^5.0.1",
     "clear": "^0.1.0",
     "clui": "^0.3.6",
     "dayjs": "^1.11.0",
     "figlet": "^1.5.2",
-    "inquirer": "^8.2.1",
+    "inquirer": "^8.2.2",
     "js-yaml": "^4.1.0",
     "websocket-as-promised": "^2.0.1",
     "ws": "^8.5.0",
-    "yargs": "^17.3.1"
+    "yargs": "^17.4.0"
   }
 }
