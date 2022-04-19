@@ -19,5 +19,5 @@
       "editor.formatOnSave": true,
       "editor.renderWhitespace": "all",
       "editor.acceptSuggestionOnEnter": "off"
-    },
+    }
   }
