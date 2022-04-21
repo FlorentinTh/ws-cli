@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.4](https://github.com/FlorentinTh/ws-cli/compare/v2.0.3...v2.0.4) (2022-04-21)
+
+
+### Chore
+
+* **deps:** fix some dependencies vulnerabilities ([49757ea](https://github.com/FlorentinTh/ws-cli/commit/49757ead95255bff9d3846bf31279f424d59f703))
+* **eslint:** fix previous changes made in eslint config ([b0ec58b](https://github.com/FlorentinTh/ws-cli/commit/b0ec58bd98c9130bcf42a0ff6fe0f43e9b1fcc8b))
+
 ### [2.0.3](https://github.com/FlorentinTh/ws-cli/compare/v2.0.2...v2.0.3) (2022-04-19)
 
 
