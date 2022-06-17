@@ -60,7 +60,7 @@
     "inquirer": "^8.2.4",
     "js-yaml": "^4.1.0",
     "websocket-as-promised": "^2.0.1",
-    "ws": "^8.6.0",
+    "ws": "^8.7.0",
     "yargs": "^17.5.1"
   },
   "overrides": {
