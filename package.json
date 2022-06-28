@@ -40,13 +40,13 @@
   ],
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.15.0",
+    "eslint": "^8.18.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-json": "^3.1.0",
-    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-prettier": "^4.1.0",
     "pre-commit": "^1.2.2",
-    "prettier": "^2.6.2",
+    "prettier": "^2.7.1",
     "standard-version": "^9.5.0"
   },
   "dependencies": {
@@ -55,12 +55,12 @@
     "chalk": "^5.0.1",
     "clear": "^0.1.0",
     "clui": "^0.3.6",
-    "dayjs": "^1.11.2",
+    "dayjs": "^1.11.3",
     "figlet": "^1.5.2",
-    "inquirer": "^8.2.4",
+    "inquirer": "^9.0.0",
     "js-yaml": "^4.1.0",
     "websocket-as-promised": "^2.0.1",
-    "ws": "^8.6.0",
+    "ws": "^8.8.0",
     "yargs": "^17.5.1"
   },
   "overrides": {
