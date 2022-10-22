@@ -61,7 +61,7 @@
     "js-yaml": "^4.1.0",
     "websocket-as-promised": "^2.0.1",
     "ws": "^8.8.0",
-    "yargs": "^17.5.1"
+    "yargs": "^17.6.0"
   },
   "overrides": {
     "commitizen": "^4.2.4",
