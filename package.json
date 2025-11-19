@@ -58,7 +58,7 @@
     "dayjs": "^1.11.3",
     "figlet": "^1.5.2",
     "inquirer": "^9.0.0",
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.1.1",
     "websocket-as-promised": "^2.0.1",
     "ws": "^8.8.0",
     "yargs": "^17.5.1"
